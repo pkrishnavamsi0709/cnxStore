@@ -286,7 +286,7 @@ const ChatWidget = () => {
 
     // Build order message
     const variantIds = selectedDetails.map((d) => d.variantId).join(", ");
-    const orderMessage = `Order These products: variant ID = ${variantIds}, email = VamsiKrishna@gmail.com`;
+    const orderMessage = `Order These products: variant ID = ${variantIds}, email = customer500@example.com`;
     // Call the product search API as the order API
     try {
       const response = await fetch(
