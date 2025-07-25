@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
+import ReactMarkdown from 'react-markdown';
 
 const CHAT_HISTORY_KEY = "chatWidgetHistory";
 
@@ -21,10 +22,11 @@ const ChatWidget = () => {
   ); // Store ordered variants for display
   const [loadingProducts, setLoadingProducts] = React.useState(false);
   const [orderResult, setOrderResult] = React.useState(null); // Store order API response
+  const [showProductGrid, setShowProductGrid] = React.useState(false); // NEW: control product grid visibility
 
   // Option sets
   const contextOptions = [
-    { label: "Orders Status", value: "orders" },
+    { label: "Orders Status", value: "orders_status" },
     { label: "Search And Order", value: "products" },
     { label: "Conversational", value: "support" },
   ];
@@ -48,13 +50,19 @@ const ChatWidget = () => {
     setProducts([]);
     setSelectedVariants([]);
     if (option.value === "products") {
-      setMessages((msgs) => [
-        ...msgs,
-        { from: "user", text: option.label },
+      setMessages([
         { from: "bot", text: "Please enter your search to find products." },
       ]);
-    } else {
-      setMessages((msgs) => [...msgs, { from: "user", text: option.label }]);
+    } else if (option.value === "orders_status") {
+      // Always clear all messages and show only the order ID prompt
+      setMessages([
+        { from: "bot", text: "Please provide your order ID to check the status." },
+      ]);
+    } else if (option.value === "support") {
+      setMessages([
+        { from: "bot", text: "How can I assist you? Please enter your query below." },
+      ]);
+      return;
     }
   };
 
@@ -152,6 +160,7 @@ const ChatWidget = () => {
       }
       setLoadingProducts(false);
       setProducts(products);
+      setShowProductGrid(true); // NEW: control product grid visibility
       setMessages((msgs) => {
         const newMsgs = [...msgs];
         const lastLoadingIdx = newMsgs
@@ -160,22 +169,23 @@ const ChatWidget = () => {
         if (lastLoadingIdx !== -1) {
           newMsgs[lastLoadingIdx] = {
             from: "bot",
-            text:
-              products.length > 0
-                ? "Here are the products matching your search:"
-                : "No products found for your search.",
+            text: "Here are the products matching your search:",
           };
         }
         return newMsgs;
       });
       return;
     }
-    setMessages((msgs) => [...msgs, { from: "user", text: userInput }]);
-    setInput("");
-    // --- Other Contexts ---
-    let apiUrl = "https://agent-prod.studio.lyzr.ai/v3/inference/chat/";
-    if (context === "orders") {
+    if (context === "orders_status") {
+      const apiUrl = "https://agent-prod.studio.lyzr.ai/v3/inference/chat/";
       // Order Status: send order ID as message
+      // Show loading message
+      setMessages((msgs) => [
+        ...msgs,
+        { from: "user", text: userInput },
+        { from: "bot", text: "Getting your order status, please wait...", isLoading: true },
+      ]);
+      setInput("");
       try {
         const response = await fetch(apiUrl, {
           method: "POST",
@@ -193,10 +203,39 @@ const ChatWidget = () => {
         const data = await response.json();
         let statusMsg =
           data.message || data.status || data.body || JSON.stringify(data);
-        setMessages((msgs) => [...msgs, { from: "bot", text: statusMsg }]);
+        // Try to parse and style order status if possible
+        let orderObj = null;
+        let isOrderStatus = false;
+        if (typeof data.response === 'string') {
+          try {
+            const parsed = JSON.parse(data.response);
+            if (parsed && parsed.order_id) {
+              orderObj = parsed;
+              isOrderStatus = true;
+            }
+          } catch (e) {}
+        } else if (data.response && data.response.order_id) {
+          orderObj = data.response;
+          isOrderStatus = true;
+        }
+        // Replace the loading message with the result
+        setMessages((msgs) => {
+          const newMsgs = [...msgs];
+          const lastLoadingIdx = newMsgs.map(m => m.isLoading).lastIndexOf(true);
+          if (lastLoadingIdx !== -1) {
+            newMsgs.splice(lastLoadingIdx, 1);
+          }
+          if (isOrderStatus && orderObj) {
+            newMsgs.push({ from: "bot", isOrderStatus: true, orderObj });
+          } else {
+            newMsgs.push({ from: "bot", text: statusMsg });
+          }
+          return newMsgs;
+        });
+        return;
       } catch (error) {
         setMessages((msgs) => [
-          ...msgs,
+          ...msgs.filter(m => !m.isLoading),
           {
             from: "bot",
             text: "Sorry, there was an error checking order status.",
@@ -205,22 +244,25 @@ const ChatWidget = () => {
       }
       return;
     }
-    setMessages((msgs) => [...msgs, { from: "user", text: userInput }]);
-    setInput("");
-    // --- Conversational Context ---
     if (context === "support") {
-      apiUrl = "https://agent-prod.studio.lyzr.ai/v3/inference/chat/";
+      const apiUrl = "https://agent-prod.studio.lyzr.ai/v3/inference/chat/";
+      setMessages((msgs) => [
+        ...msgs,
+        { from: "user", text: userInput },
+        { from: "bot", text: "Let me check that for you...", isLoading: true },
+      ]);
+      setInput("");
       try {
         const response = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": "sk-default-CYSWi0UWelyMdF3VhvhaddPG4dT0LUNt",
+            "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
           },
           body: JSON.stringify({
             user_id: "parvathi.somanahalli@gmail.com",
-            agent_id: "687e12218c24464a4cccaf22",
-            session_id: "687e12218c24464a4cccaf22-irfnw1c087n",
+            agent_id: "68822554172d1544aaa30354",
+            session_id: "68822554172d1544aaa30354-u13l1cpgcsp",
             message: userInput,
           }),
         });
@@ -231,25 +273,36 @@ const ChatWidget = () => {
           data.title ||
           data.body ||
           "Received response from API.";
-        setMessages((msgs) => [
-          ...msgs,
-          {
+        // Replace the waiting message with the actual response
+        setMessages((msgs) => {
+          const newMsgs = [...msgs];
+          const lastLoadingIdx = newMsgs.map(m => m.isLoading).lastIndexOf(true);
+          if (lastLoadingIdx !== -1) {
+            newMsgs.splice(lastLoadingIdx, 1);
+          }
+          newMsgs.push({
             from: "bot",
             text:
               typeof botMessage === "string"
                 ? botMessage
                 : JSON.stringify(botMessage),
-          },
-        ]);
+          });
+          return newMsgs;
+        });
+        return;
       } catch (error) {
         setMessages((msgs) => [
-          ...msgs,
+          ...msgs.filter(m => !m.isLoading),
           {
             from: "bot",
             text: "Sorry, there was an error contacting the API.",
           },
         ]);
       }
+      return;
+    } else {
+      setMessages((msgs) => [...msgs, { from: "user", text: userInput }]);
+      setInput("");
     }
   };
 
@@ -286,7 +339,9 @@ const ChatWidget = () => {
 
     // Build order message
     const variantIds = selectedDetails.map((d) => d.variantId).join(", ");
-    const orderMessage = `Order These products: variant ID = ${variantIds}, email = customer500@example.com`;
+    const loggedInUserEmail = "VamsiKrishna@gmail.com";
+    const orderMessage = 'Order These products: variant ID = ' + variantIds + ', email = "' + loggedInUserEmail + '"';
+    //const orderMessage = `Order These products: variant ID = ${variantIds}, email = "${loggedInUserEmail}"`;
     // Call the product search API as the order API
     try {
       const response = await fetch(
@@ -295,12 +350,12 @@ const ChatWidget = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
+            "x-api-key": "sk-default-mjyJEOkWFUTES3y4SXmJpr3NjDwMhOhx",
           },
           body: JSON.stringify({
-            user_id: "parvathi.somanahalli@gmail.com",
-            agent_id: "6880f7a1172d1544aaa2f698",
-            session_id: "6880f7a1172d1544aaa2f698-pw5vk0zcp0p",
+            user_id: "cnxedgeservicedemo@gmail.com",
+            agent_id: "687f46b4c1234207fb33172a",
+            session_id: "687f46b4c1234207fb33172a-0vws9vb2kjwa",
             message: orderMessage,
           }),
         }
@@ -315,35 +370,23 @@ const ChatWidget = () => {
         }
       }
       if (orderResultObj.order_created) {
-        setMessages((msgs) => [
-          ...msgs,
-          {
+        setMessages((msgs) => {
+          let newMsgs = [...msgs];
+          while (newMsgs.length && newMsgs[newMsgs.length - 1].isLoading) {
+            newMsgs.pop();
+          }
+          newMsgs.push({
             from: "bot",
-            text: orderResultObj.order_created.message,
-          },
-        ]);
+            isOrderCreated: true,
+            orderCreatedObj: orderResultObj.order_created,
+          });
+          newMsgs.push({
+            from: "bot",
+            text: "You can search for more products by entering a query below."
+          });
+          return newMsgs;
+        });
         setOrderResult(null);
-        setTimeout(() => {
-          setMessages((msgs) => [
-            ...msgs,
-            { from: "bot", text: "Hi! How can I help you today?" },
-          ]);
-          setContext(null);
-          setSelectedOption(null);
-          setProducts([]);
-          setSelectedVariants([]);
-          setOrderedVariantsDetails([]);
-          setOrderResult(null);
-        }, 10500);
-        setTimeout(() => {
-          setMessages([{ from: "bot", text: "Hi! How can I help you today?" }]);
-          setContext(null);
-          setSelectedOption(null);
-          setProducts([]);
-          setSelectedVariants([]);
-          setOrderedVariantsDetails([]);
-          setOrderResult(null);
-        }, 30000);
       } else {
         setOrderResult(
           orderResultObj.message || "Failed to place order. Please try again."
@@ -356,6 +399,42 @@ const ChatWidget = () => {
     // Optionally, clear selected variants after ordering
     // setSelectedVariants([]);
   };
+
+  // Handler to go back to main menu
+  const handleBackToMainMenu = () => {
+    setContext(null);
+    setSelectedOption(null);
+    setProducts([]);
+    setSelectedVariants([]);
+    setOrderedVariantsDetails([]);
+    setOrderResult(null);
+    setMessages(getInitialMessages());
+  };
+
+  // Helper to render order status card
+  const renderOrderStatusCard = (order) => (
+    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md">
+      <div className="font-semibold text-blue-900 mb-2">Order #{order.order_number}</div>
+      <div className="text-blue-900 mb-1">Product: <span className="font-medium">{order.product}</span></div>
+      <div className="text-blue-900 mb-1">Quantity: <span className="font-medium">{order.quantity}</span></div>
+      <div className="text-blue-900 mb-1">Total Paid: <span className="font-medium">{order.total_paid}</span></div>
+      <div className="text-blue-900 mb-1">Status: <span className="font-medium">{order.status}</span></div>
+      <div className="text-blue-900 mb-1">Fulfillment: <span className="font-medium">{order.fulfillment_status}</span></div>
+      <div className="text-blue-900 mb-1">Order Date: <span className="font-medium">{order.order_date}</span></div>
+    </div>
+  );
+
+  // Helper to render order created card
+  const renderOrderCreatedCard = (order) => (
+    <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md">
+      <div className="font-semibold text-green-900 mb-2">Order Placed Successfully!</div>
+      <div className="text-green-900 mb-1">Track ID: <span className="font-medium">{order.id}</span></div>
+      <div className="text-green-900 mb-1">Order ID: <span className="font-medium">{order.order_id}</span></div>
+      <div className="text-green-900 mb-1">Product: <span className="font-medium">{order.product}</span></div>
+      <div className="text-green-900 mb-1">Total Paid: <span className="font-medium">{order.total_paid}</span></div>
+      <div className="text-green-900 mt-2">{order.message}</div>
+    </div>
+  );
 
   return (
     <>
@@ -375,6 +454,31 @@ const ChatWidget = () => {
               exit={{ opacity: 0, scale: 0.95, y: 40 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
             >
+              {/* Back to Main Menu Icon Button */}
+              {context && (
+                <button
+                  className="absolute left-4 top-4 bg-white text-blue-900 p-2 rounded-full shadow hover:bg-blue-100 border border-blue-200 transition flex items-center justify-center z-20"
+                  onClick={handleBackToMainMenu}
+                  title="Back to Main Menu"
+                  aria-label="Back to Main Menu"
+                  style={{ width: 36, height: 36 }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </button>
+              )}
               {/* Close Button Top Right */}
               <button
                 className="absolute top-4 right-4 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-full p-2 z-10"
@@ -397,135 +501,145 @@ const ChatWidget = () => {
                 </svg>
               </button>
               {/* Chat Messages */}
-              <div className="flex-1 overflow-y-auto px-6 py-8 space-y-8 font-bodyFont">
+              {/* Add extra padding to chat content to avoid overlap */}
+              <div className="flex-1 overflow-y-auto px-6 pt-16 pb-8 space-y-8 font-bodyFont">
                 {messages.map((msg, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex ${
-                      msg.from === "user" ? "justify-end" : "justify-start"
-                    }`}
-                  >
-                    {msg.from === "bot" ? (
-                      <div className="flex items-start gap-3">
-                        <span className="mt-1 text-xl">✨</span>
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-blue-900 font-semibold text-base">
-                              CNX AI
-                            </span>
-                          </div>
-                          <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-white text-blue-900 shadow-md max-w-[540px] whitespace-pre-line">
-                            {msg.text}
-                          </span>
-                          {idx === 0 && !context && (
-                            <div className="flex flex-col gap-3 mt-3 items-center">
-                              {contextOptions.map((option) => (
-                                <button
-                                  key={option.value}
-                                  className="w-full max-w-xs px-4 py-2 rounded-full bg-blue-100 text-blue-900 text-sm font-semibold shadow hover:bg-blue-200 border border-blue-300 transition"
-                                  onClick={() => handleContextSelect(option)}
-                                >
-                                  {option.label}
-                                </button>
-                              ))}
+                  <React.Fragment key={idx}>
+                    <div
+                      className={`flex ${
+                        msg.from === "user" ? "justify-end" : "justify-start"
+                      }`}
+                    >
+                      {msg.from === "bot" ? (
+                        <div className="flex items-start gap-3">
+                          <span className="mt-1 text-xl">✨</span>
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="text-blue-900 font-semibold text-base">
+                                CNX AI
+                              </span>
                             </div>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-blue-400/80 text-white shadow-md max-w-[540px] whitespace-pre-line">
-                        {msg.text}
-                      </span>
-                    )}
-                  </div>
-                ))}
-                {/* Move product grid outside the message loop */}
-                {context === "products" && products.length > 0 && (
-                  <div className="mt-6">
-                    <div className="mb-2 font-semibold text-blue-900">
-                      Select products to order:
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      {products.map((product) => (
-                        <div
-                          key={product.id}
-                          className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
-                        >
-                          <img
-                            src={
-                              product.images &&
-                              product.images[0] &&
-                              product.images[0].src
-                                ? product.images[0].src
-                                : "https://via.placeholder.com/96x96?text=No+Image"
+                            {msg.isOrderCreated && msg.orderCreatedObj
+                              ? renderOrderCreatedCard(msg.orderCreatedObj)
+                              : msg.isOrderStatus && msg.orderObj
+                                ? renderOrderStatusCard(msg.orderObj)
+                                : msg.from === 'bot' && msg.text && msg.text.match(/[#*\-`]/)
+                                  ? <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-white text-blue-900 shadow-md max-w-[540px] whitespace-pre-line">
+                                      <ReactMarkdown>{msg.text}</ReactMarkdown>
+                                    </span>
+                                  : <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-white text-blue-900 shadow-md max-w-[540px] whitespace-pre-line">{msg.text}</span>
                             }
-                            alt={product.title}
-                            className="w-24 h-24 object-cover rounded mb-2"
-                          />
-                          <div className="font-semibold text-primeColor mb-1 text-center">
-                            {product.title}
-                          </div>
-                          <div className="text-sm text-gray-700 mb-2 text-center">
-                            {product.product_type}
-                          </div>
-                          <div className="w-full flex flex-col gap-1">
-                            {product.variants.map((variant) => (
-                              <label
-                                key={variant.id}
-                                className="flex items-center gap-2 cursor-pointer"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedVariants.includes(
-                                    variant.id
-                                  )}
-                                  onChange={() =>
-                                    handleVariantToggle(variant.id)
-                                  }
-                                />
-                                <span>
-                                  {variant.title} - ${variant.price}
-                                </span>
-                              </label>
-                            ))}
+                            {/* Insert product grid immediately after the search result message */}
+                            {msg.text === "Here are the products matching your search:" && products.length > 0 && (
+                              <div className="mt-6">
+                                <div className="mb-2 font-semibold text-blue-900">
+                                  Select products to order:
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  {products.map((product) => (
+                                    <div
+                                      key={product.id}
+                                      className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
+                                    >
+                                      <img
+                                        src={
+                                          product.images &&
+                                          product.images[0] &&
+                                          product.images[0].src
+                                            ? product.images[0].src
+                                            : "https://via.placeholder.com/96x96?text=No+Image"
+                                        }
+                                        alt={product.title}
+                                        className="w-24 h-24 object-cover rounded mb-2"
+                                      />
+                                      <div className="font-semibold text-primeColor mb-1 text-center">
+                                        {product.title}
+                                      </div>
+                                      <div className="text-sm text-gray-700 mb-2 text-center">
+                                        {product.product_type}
+                                      </div>
+                                      <div className="w-full flex flex-col gap-1">
+                                        {product.variants.map((variant) => (
+                                          <label
+                                            key={variant.id}
+                                            className="flex items-center gap-2 cursor-pointer"
+                                          >
+                                            <input
+                                              type="checkbox"
+                                              checked={selectedVariants.includes(
+                                                variant.id
+                                              )}
+                                              onChange={() =>
+                                                handleVariantToggle(variant.id)
+                                              }
+                                            />
+                                            <span>
+                                              {variant.title} - ${variant.price}
+                                            </span>
+                                          </label>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                                {selectedVariants.length > 0 && (
+                                  <div className="w-full flex justify-center mt-6">
+                                    <button
+                                      className="bg-blue-500 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-blue-600 transition"
+                                      onClick={handleOrder}
+                                      disabled={ordering}
+                                    >
+                                      {ordering ? "Ordering..." : "Order"}
+                                    </button>
+                                  </div>
+                                )}
+                                {/* Show ordered variants details below the product grid */}
+                                {orderedVariantsDetails.length > 0 && (
+                                  <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <div className="font-semibold text-blue-900 mb-2">
+                                      You have selected:
+                                    </div>
+                                    <ul className="list-disc pl-5">
+                                      {orderedVariantsDetails.map((d, i) => (
+                                        <li key={i} className="text-blue-900">
+                                          {d.productTitle} - {d.variantTitle} (${d.price})
+                                        </li>
+                                      ))}
+                                    </ul>
+                                    {/* Show order API result below the selected variants */}
+                                    {orderResult && (
+                                      <div className="mt-4 text-green-700 font-semibold">
+                                        {orderResult}
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            {/* Restore main menu (context selection buttons) when context is null and this is the first message */}
+                            {idx === 0 && !context && (
+                              <div className="flex flex-col gap-3 mt-3 items-center">
+                                {contextOptions.map((option) => (
+                                  <button
+                                    key={option.value}
+                                    className="w-full max-w-xs px-4 py-2 rounded-full bg-blue-100 text-blue-900 text-sm font-semibold shadow hover:bg-blue-200 border border-blue-300 transition"
+                                    onClick={() => handleContextSelect(option)}
+                                  >
+                                    {option.label}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
-                      ))}
+                      ) : (
+                        <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-blue-400/80 text-white shadow-md max-w-[540px] whitespace-pre-line">
+                          {msg.text}
+                        </span>
+                      )}
                     </div>
-                    {selectedVariants.length > 0 && (
-                      <div className="w-full flex justify-center mt-6">
-                        <button
-                          className="bg-blue-500 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-blue-600 transition"
-                          onClick={handleOrder}
-                          disabled={ordering}
-                        >
-                          {ordering ? "Ordering..." : "Order"}
-                        </button>
-                      </div>
-                    )}
-                    {/* Show ordered variants details below the product grid */}
-                    {orderedVariantsDetails.length > 0 && (
-                      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <div className="font-semibold text-blue-900 mb-2">
-                          You have selected:
-                        </div>
-                        <ul className="list-disc pl-5">
-                          {orderedVariantsDetails.map((d, i) => (
-                            <li key={i} className="text-blue-900">
-                              {d.productTitle} - {d.variantTitle} (${d.price})
-                            </li>
-                          ))}
-                        </ul>
-                        {/* Show order API result below the selected variants */}
-                        {orderResult && (
-                          <div className="mt-4 text-green-700 font-semibold">
-                            {orderResult}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                )}
+                  </React.Fragment>
+                ))}
               </div>
               {/* Input Area */}
               <div className="px-4 py-4 bg-gray-100 border-t border-gray-200 flex items-center gap-3">
