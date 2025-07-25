@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { MdClose } from "react-icons/md";
-import { HiMenuAlt2 } from "react-icons/hi";
 import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { HiMenuAlt2 } from "react-icons/hi";
+import { MdClose } from "react-icons/md";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { logo, logoLight } from "../../../assets/images";
-import Image from "../../designLayouts/Image";
 import { navBarList } from "../../../constants";
 import Flex from "../../designLayouts/Flex";
+import Image from "../../designLayouts/Image";
+import ChatWidget from "../ChatWidget/ChatWidget";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(true);
@@ -150,6 +151,7 @@ const Header = () => {
           </div>
         </Flex>
       </nav>
+      <ChatWidget />
     </div>
   );
 };

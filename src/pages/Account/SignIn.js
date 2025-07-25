@@ -49,10 +49,29 @@ const handleSubmit = async (formData) => {
       window.alert("User login successful");
       navigate("/");
     }
+
+
+    if (!password) {
+      setErrPassword("Create a password");
+    }
+    // ============== Getting the value ==============
+    if (email && password) {
+      setSuccessMsg(
+        `Hello dear, Thank you for your attempt. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
+      );
+      setEmail("");
+      setPassword("");
+      // Set login flag in localStorage
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userEmail", email);
+    }
+  };
+
   } catch (err) {
     setError("Login failed.");
   }
 };
+
   return (
     <div className="w-full h-screen flex items-center justify-center">
       <div className="w-1/2 hidden lgl:inline-flex h-full text-white">
