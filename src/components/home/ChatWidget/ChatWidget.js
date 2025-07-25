@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
+import { useNavigate } from "react-router-dom";
 
 const CHAT_HISTORY_KEY = "chatWidgetHistory";
 
@@ -10,6 +11,8 @@ const getInitialMessages = () => [
 
 const ChatWidget = () => {
   const [open, setOpen] = React.useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = React.useState(false); // NEW: show login modal
+  const navigate = useNavigate(); // NEW: for redirecting to login
   const [messages, setMessages] = React.useState(getInitialMessages);
   const [input, setInput] = React.useState("");
   const [context, setContext] = React.useState(null); // 'orders', 'products', 'support', etc.
@@ -32,7 +35,14 @@ const ChatWidget = () => {
   ];
 
   React.useEffect(() => {
-    const handler = () => setOpen(true);
+    const handler = () => {
+      // Check login state before opening chat
+      if (localStorage.getItem("isLoggedIn") === "true") {
+        setOpen(true);
+      } else {
+        setShowLoginPrompt(true);
+      }
+    };
     window.addEventListener("openChatWidget", handler);
     return () => window.removeEventListener("openChatWidget", handler);
   }, []);
@@ -56,11 +66,17 @@ const ChatWidget = () => {
     } else if (option.value === "orders_status") {
       // Always clear all messages and show only the order ID prompt
       setMessages([
-        { from: "bot", text: "Please provide your order ID to check the status." },
+        {
+          from: "bot",
+          text: "Please provide your order ID to check the status.",
+        },
       ]);
     } else if (option.value === "support") {
       setMessages([
-        { from: "bot", text: "How can I assist you? Please enter your query below." },
+        {
+          from: "bot",
+          text: "How can I assist you? Please enter your query below.",
+        },
       ]);
       return;
     }
@@ -183,7 +199,11 @@ const ChatWidget = () => {
       setMessages((msgs) => [
         ...msgs,
         { from: "user", text: userInput },
-        { from: "bot", text: "Getting your order status, please wait...", isLoading: true },
+        {
+          from: "bot",
+          text: "Getting your order status, please wait...",
+          isLoading: true,
+        },
       ]);
       setInput("");
       try {
@@ -206,7 +226,7 @@ const ChatWidget = () => {
         // Try to parse and style order status if possible
         let orderObj = null;
         let isOrderStatus = false;
-        if (typeof data.response === 'string') {
+        if (typeof data.response === "string") {
           try {
             const parsed = JSON.parse(data.response);
             if (parsed && parsed.order_id) {
@@ -221,7 +241,9 @@ const ChatWidget = () => {
         // Replace the loading message with the result
         setMessages((msgs) => {
           const newMsgs = [...msgs];
-          const lastLoadingIdx = newMsgs.map(m => m.isLoading).lastIndexOf(true);
+          const lastLoadingIdx = newMsgs
+            .map((m) => m.isLoading)
+            .lastIndexOf(true);
           if (lastLoadingIdx !== -1) {
             newMsgs.splice(lastLoadingIdx, 1);
           }
@@ -235,7 +257,7 @@ const ChatWidget = () => {
         return;
       } catch (error) {
         setMessages((msgs) => [
-          ...msgs.filter(m => !m.isLoading),
+          ...msgs.filter((m) => !m.isLoading),
           {
             from: "bot",
             text: "Sorry, there was an error checking order status.",
@@ -276,7 +298,9 @@ const ChatWidget = () => {
         // Replace the waiting message with the actual response
         setMessages((msgs) => {
           const newMsgs = [...msgs];
-          const lastLoadingIdx = newMsgs.map(m => m.isLoading).lastIndexOf(true);
+          const lastLoadingIdx = newMsgs
+            .map((m) => m.isLoading)
+            .lastIndexOf(true);
           if (lastLoadingIdx !== -1) {
             newMsgs.splice(lastLoadingIdx, 1);
           }
@@ -292,7 +316,7 @@ const ChatWidget = () => {
         return;
       } catch (error) {
         setMessages((msgs) => [
-          ...msgs.filter(m => !m.isLoading),
+          ...msgs.filter((m) => !m.isLoading),
           {
             from: "bot",
             text: "Sorry, there was an error contacting the API.",
@@ -340,7 +364,12 @@ const ChatWidget = () => {
     // Build order message
     const variantIds = selectedDetails.map((d) => d.variantId).join(", ");
     const loggedInUserEmail = "VamsiKrishna@gmail.com";
-    const orderMessage = 'Order These products: variant ID = ' + variantIds + ', email = "' + loggedInUserEmail + '"';
+    const orderMessage =
+      "Order These products: variant ID = " +
+      variantIds +
+      ', email = "' +
+      loggedInUserEmail +
+      '"';
     //const orderMessage = `Order These products: variant ID = ${variantIds}, email = "${loggedInUserEmail}"`;
     // Call the product search API as the order API
     try {
@@ -382,7 +411,7 @@ const ChatWidget = () => {
           });
           newMsgs.push({
             from: "bot",
-            text: "You can search for more products by entering a query below."
+            text: "You can search for more products by entering a query below.",
           });
           return newMsgs;
         });
@@ -414,30 +443,83 @@ const ChatWidget = () => {
   // Helper to render order status card
   const renderOrderStatusCard = (order) => (
     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md">
-      <div className="font-semibold text-blue-900 mb-2">Order #{order.order_number}</div>
-      <div className="text-blue-900 mb-1">Product: <span className="font-medium">{order.product}</span></div>
-      <div className="text-blue-900 mb-1">Quantity: <span className="font-medium">{order.quantity}</span></div>
-      <div className="text-blue-900 mb-1">Total Paid: <span className="font-medium">{order.total_paid}</span></div>
-      <div className="text-blue-900 mb-1">Status: <span className="font-medium">{order.status}</span></div>
-      <div className="text-blue-900 mb-1">Fulfillment: <span className="font-medium">{order.fulfillment_status}</span></div>
-      <div className="text-blue-900 mb-1">Order Date: <span className="font-medium">{order.order_date}</span></div>
+      <div className="font-semibold text-blue-900 mb-2">
+        Order #{order.order_number}
+      </div>
+      <div className="text-blue-900 mb-1">
+        Product: <span className="font-medium">{order.product}</span>
+      </div>
+      <div className="text-blue-900 mb-1">
+        Quantity: <span className="font-medium">{order.quantity}</span>
+      </div>
+      <div className="text-blue-900 mb-1">
+        Total Paid: <span className="font-medium">{order.total_paid}</span>
+      </div>
+      <div className="text-blue-900 mb-1">
+        Status: <span className="font-medium">{order.status}</span>
+      </div>
+      <div className="text-blue-900 mb-1">
+        Fulfillment:{" "}
+        <span className="font-medium">{order.fulfillment_status}</span>
+      </div>
+      <div className="text-blue-900 mb-1">
+        Order Date: <span className="font-medium">{order.order_date}</span>
+      </div>
     </div>
   );
 
   // Helper to render order created card
   const renderOrderCreatedCard = (order) => (
     <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md">
-      <div className="font-semibold text-green-900 mb-2">Order Placed Successfully!</div>
-      <div className="text-green-900 mb-1">Track ID: <span className="font-medium">{order.id}</span></div>
-      <div className="text-green-900 mb-1">Order ID: <span className="font-medium">{order.order_id}</span></div>
-      <div className="text-green-900 mb-1">Product: <span className="font-medium">{order.product}</span></div>
-      <div className="text-green-900 mb-1">Total Paid: <span className="font-medium">{order.total_paid}</span></div>
+      <div className="font-semibold text-green-900 mb-2">
+        Order Placed Successfully!
+      </div>
+      <div className="text-green-900 mb-1">
+        Track ID: <span className="font-medium">{order.id}</span>
+      </div>
+      <div className="text-green-900 mb-1">
+        Order ID: <span className="font-medium">{order.order_id}</span>
+      </div>
+      <div className="text-green-900 mb-1">
+        Product: <span className="font-medium">{order.product}</span>
+      </div>
+      <div className="text-green-900 mb-1">
+        Total Paid: <span className="font-medium">{order.total_paid}</span>
+      </div>
       <div className="text-green-900 mt-2">{order.message}</div>
     </div>
   );
 
   return (
     <>
+      {/* Login Prompt Modal */}
+      {showLoginPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center max-w-sm w-full">
+            <div className="text-2xl font-bold text-blue-900 mb-4">
+              Please Login
+            </div>
+            <div className="text-gray-700 mb-6 text-center">
+              You need to be logged in to use the chat assistant.
+            </div>
+            <button
+              className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold text-lg hover:bg-blue-600 transition mb-2"
+              onClick={() => {
+                setShowLoginPrompt(false);
+                navigate("/signin");
+              }}
+            >
+              Go to Login
+            </button>
+            <button
+              className="text-blue-500 underline text-sm mt-2"
+              onClick={() => setShowLoginPrompt(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -519,103 +601,114 @@ const ChatWidget = () => {
                                 CNX AI
                               </span>
                             </div>
-                            {msg.isOrderCreated && msg.orderCreatedObj
-                              ? renderOrderCreatedCard(msg.orderCreatedObj)
-                              : msg.isOrderStatus && msg.orderObj
-                                ? renderOrderStatusCard(msg.orderObj)
-                                : msg.from === 'bot' && msg.text && msg.text.match(/[#*\-`]/)
-                                  ? <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-white text-blue-900 shadow-md max-w-[540px] whitespace-pre-line">
-                                      <ReactMarkdown>{msg.text}</ReactMarkdown>
-                                    </span>
-                                  : <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-white text-blue-900 shadow-md max-w-[540px] whitespace-pre-line">{msg.text}</span>
-                            }
-                            {/* Insert product grid immediately after the search result message */}
-                            {msg.text === "Here are the products matching your search:" && products.length > 0 && (
-                              <div className="mt-6">
-                                <div className="mb-2 font-semibold text-blue-900">
-                                  Select products to order:
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                  {products.map((product) => (
-                                    <div
-                                      key={product.id}
-                                      className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
-                                    >
-                                      <img
-                                        src={
-                                          product.images &&
-                                          product.images[0] &&
-                                          product.images[0].src
-                                            ? product.images[0].src
-                                            : "https://via.placeholder.com/96x96?text=No+Image"
-                                        }
-                                        alt={product.title}
-                                        className="w-24 h-24 object-cover rounded mb-2"
-                                      />
-                                      <div className="font-semibold text-primeColor mb-1 text-center">
-                                        {product.title}
-                                      </div>
-                                      <div className="text-sm text-gray-700 mb-2 text-center">
-                                        {product.product_type}
-                                      </div>
-                                      <div className="w-full flex flex-col gap-1">
-                                        {product.variants.map((variant) => (
-                                          <label
-                                            key={variant.id}
-                                            className="flex items-center gap-2 cursor-pointer"
-                                          >
-                                            <input
-                                              type="checkbox"
-                                              checked={selectedVariants.includes(
-                                                variant.id
-                                              )}
-                                              onChange={() =>
-                                                handleVariantToggle(variant.id)
-                                              }
-                                            />
-                                            <span>
-                                              {variant.title} - ${variant.price}
-                                            </span>
-                                          </label>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                                {selectedVariants.length > 0 && (
-                                  <div className="w-full flex justify-center mt-6">
-                                    <button
-                                      className="bg-blue-500 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-blue-600 transition"
-                                      onClick={handleOrder}
-                                      disabled={ordering}
-                                    >
-                                      {ordering ? "Ordering..." : "Order"}
-                                    </button>
-                                  </div>
-                                )}
-                                {/* Show ordered variants details below the product grid */}
-                                {orderedVariantsDetails.length > 0 && (
-                                  <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <div className="font-semibold text-blue-900 mb-2">
-                                      You have selected:
-                                    </div>
-                                    <ul className="list-disc pl-5">
-                                      {orderedVariantsDetails.map((d, i) => (
-                                        <li key={i} className="text-blue-900">
-                                          {d.productTitle} - {d.variantTitle} (${d.price})
-                                        </li>
-                                      ))}
-                                    </ul>
-                                    {/* Show order API result below the selected variants */}
-                                    {orderResult && (
-                                      <div className="mt-4 text-green-700 font-semibold">
-                                        {orderResult}
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
-                              </div>
+                            {msg.isOrderCreated && msg.orderCreatedObj ? (
+                              renderOrderCreatedCard(msg.orderCreatedObj)
+                            ) : msg.isOrderStatus && msg.orderObj ? (
+                              renderOrderStatusCard(msg.orderObj)
+                            ) : msg.from === "bot" &&
+                              msg.text &&
+                              msg.text.match(/[#*\-`]/) ? (
+                              <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-white text-blue-900 shadow-md max-w-[540px] whitespace-pre-line">
+                                <ReactMarkdown>{msg.text}</ReactMarkdown>
+                              </span>
+                            ) : (
+                              <span className="inline-block px-5 py-3 rounded-2xl font-bodyFont text-base bg-white text-blue-900 shadow-md max-w-[540px] whitespace-pre-line">
+                                {msg.text}
+                              </span>
                             )}
+                            {/* Insert product grid immediately after the search result message */}
+                            {msg.text ===
+                              "Here are the products matching your search:" &&
+                              products.length > 0 && (
+                                <div className="mt-6">
+                                  <div className="mb-2 font-semibold text-blue-900">
+                                    Select products to order:
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-4">
+                                    {products.map((product) => (
+                                      <div
+                                        key={product.id}
+                                        className="bg-white rounded-lg shadow p-4 flex flex-col items-center"
+                                      >
+                                        <img
+                                          src={
+                                            product.images &&
+                                            product.images[0] &&
+                                            product.images[0].src
+                                              ? product.images[0].src
+                                              : "https://via.placeholder.com/96x96?text=No+Image"
+                                          }
+                                          alt={product.title}
+                                          className="w-24 h-24 object-cover rounded mb-2"
+                                        />
+                                        <div className="font-semibold text-primeColor mb-1 text-center">
+                                          {product.title}
+                                        </div>
+                                        <div className="text-sm text-gray-700 mb-2 text-center">
+                                          {product.product_type}
+                                        </div>
+                                        <div className="w-full flex flex-col gap-1">
+                                          {product.variants.map((variant) => (
+                                            <label
+                                              key={variant.id}
+                                              className="flex items-center gap-2 cursor-pointer"
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                checked={selectedVariants.includes(
+                                                  variant.id
+                                                )}
+                                                onChange={() =>
+                                                  handleVariantToggle(
+                                                    variant.id
+                                                  )
+                                                }
+                                              />
+                                              <span>
+                                                {variant.title} - $
+                                                {variant.price}
+                                              </span>
+                                            </label>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                  {selectedVariants.length > 0 && (
+                                    <div className="w-full flex justify-center mt-6">
+                                      <button
+                                        className="bg-blue-500 text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-blue-600 transition"
+                                        onClick={handleOrder}
+                                        disabled={ordering}
+                                      >
+                                        {ordering ? "Ordering..." : "Order"}
+                                      </button>
+                                    </div>
+                                  )}
+                                  {/* Show ordered variants details below the product grid */}
+                                  {orderedVariantsDetails.length > 0 && (
+                                    <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                      <div className="font-semibold text-blue-900 mb-2">
+                                        You have selected:
+                                      </div>
+                                      <ul className="list-disc pl-5">
+                                        {orderedVariantsDetails.map((d, i) => (
+                                          <li key={i} className="text-blue-900">
+                                            {d.productTitle} - {d.variantTitle}{" "}
+                                            (${d.price})
+                                          </li>
+                                        ))}
+                                      </ul>
+                                      {/* Show order API result below the selected variants */}
+                                      {orderResult && (
+                                        <div className="mt-4 text-green-700 font-semibold">
+                                          {orderResult}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
                             {/* Restore main menu (context selection buttons) when context is null and this is the first message */}
                             {idx === 0 && !context && (
                               <div className="flex flex-col gap-3 mt-3 items-center">

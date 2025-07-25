@@ -41,6 +41,9 @@ const SignIn = () => {
       );
       setEmail("");
       setPassword("");
+      // Set login flag in localStorage
+      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userEmail", email);
     }
   };
   return (
