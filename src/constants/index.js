@@ -28,6 +28,11 @@ export const navBarList = [
     title: "Journal",
     link: "/journal",
   },
+    {
+    _id: 1006,
+    title: "Orders",
+    link: "/orders",
+  },
 ];
 // =================== NavBarList End here ======================
 // =================== Special Offer data Start here ============
