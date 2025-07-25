@@ -35,12 +35,19 @@ const ChatWidget = () => {
   ];
 
   React.useEffect(() => {
+    // Open chat automatically after login+reload if flag is set
+    if (localStorage.getItem("openChatAfterReload") === "true") {
+      setOpen(true);
+      localStorage.removeItem("openChatAfterReload");
+    }
     const handler = () => {
       // Check login state before opening chat
-      if (localStorage.getItem("isLoggedIn") === "true") {
+      if (sessionStorage.getItem("shopifyAccessToken")) {
         setOpen(true);
       } else {
         setShowLoginPrompt(true);
+        // Store intended redirect
+        localStorage.setItem("redirectAfterLogin", "chat");
       }
     };
     window.addEventListener("openChatWidget", handler);
@@ -363,14 +370,24 @@ const ChatWidget = () => {
 
     // Build order message
     const variantIds = selectedDetails.map((d) => d.variantId).join(", ");
-    const loggedInUserEmail = "VamsiKrishna@gmail.com";
+    // Get email from sessionStorage or localStorage
+    let loggedInUserEmail = sessionStorage.getItem("shopifyUser");
+    if (loggedInUserEmail) {
+      try {
+        loggedInUserEmail = JSON.parse(loggedInUserEmail).email;
+      } catch (e) {
+        loggedInUserEmail = null;
+      }
+    }
+    if (!loggedInUserEmail) {
+      loggedInUserEmail = localStorage.getItem("userEmail") || "unknown";
+    }
     const orderMessage =
       "Order These products: variant ID = " +
       variantIds +
       ', email = "' +
       loggedInUserEmail +
       '"';
-    //const orderMessage = `Order These products: variant ID = ${variantIds}, email = "${loggedInUserEmail}"`;
     // Call the product search API as the order API
     try {
       const response = await fetch(

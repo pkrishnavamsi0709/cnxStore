@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoLight } from "../../assets/images";
-import { shopifyLogin } from "../../constants/shopifyAuth";
-import { useNavigate } from "react-router-dom";
-import { SHOPIFY_DOMAIN, SHOPIFY_STOREFRONT_TOKEN } from "../../constants/shopifyAuth";
+import {
+  SHOPIFY_DOMAIN,
+  SHOPIFY_STOREFRONT_TOKEN,
+  shopifyLogin,
+} from "../../constants/shopifyAuth";
 
 const SignIn = () => {
   // ============= Initial State Start here =============
@@ -19,58 +21,92 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-const handleSubmit = async (formData) => {
-  setError("");
-  try {
-    const res = await shopifyLogin(formData);
-    if (res.data.customerAccessTokenCreate.customerUserErrors.length) {
-      setError(res.data.customerAccessTokenCreate.customerUserErrors[0].message);
-    } else {
-      const accessToken = res.data.customerAccessTokenCreate.customerAccessToken.accessToken;
-      sessionStorage.setItem("shopifyAccessToken", accessToken);
-      // Fetch user details after login
-      try {
-        const query = `query { customer(customerAccessToken: "${accessToken}") { firstName lastName email phone } }`;
-        const userRes = await fetch(`https://${SHOPIFY_DOMAIN}/api/2023-07/graphql.json`, {
-          method: 'POST',
-          headers: {
-            'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ query })
-        });
-        const userData = await userRes.json();
-        if (userData.data && userData.data.customer) {
-          sessionStorage.setItem('shopifyUser', JSON.stringify(userData.data.customer));
-        }
-      } catch (e) {
-        // Ignore user fetch error, profile page will handle it
+  // If already logged in, redirect to home or open chat
+  React.useEffect(() => {
+    if (sessionStorage.getItem("shopifyAccessToken")) {
+      // If user came from chat, open chat after reload
+      if (localStorage.getItem("openChatAfterReload") === "true") {
+        window.dispatchEvent(new Event("openChatWidget"));
+        localStorage.removeItem("openChatAfterReload");
       }
-      window.alert("User login successful");
       navigate("/");
     }
+  }, [navigate]);
 
+  if (sessionStorage.getItem("shopifyAccessToken")) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center">
+        Redirecting...
+      </div>
+    );
+  }
 
+  const handleSubmit = async ({ email, password }) => {
+    setError("");
+    setErrEmail("");
+    setErrPassword("");
+
+    if (!email) {
+      setErrEmail("Enter your email");
+      return;
+    }
     if (!password) {
       setErrPassword("Create a password");
+      return;
     }
-    // ============== Getting the value ==============
-    if (email && password) {
-      setSuccessMsg(
-        `Hello dear, Thank you for your attempt. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
-      );
-      setEmail("");
-      setPassword("");
-      // Set login flag in localStorage
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userEmail", email);
+
+    try {
+      const res = await shopifyLogin({ email, password });
+      if (res.data.customerAccessTokenCreate.customerUserErrors.length) {
+        setError(
+          res.data.customerAccessTokenCreate.customerUserErrors[0].message
+        );
+      } else {
+        const accessToken =
+          res.data.customerAccessTokenCreate.customerAccessToken.accessToken;
+        sessionStorage.setItem("shopifyAccessToken", accessToken);
+        localStorage.setItem("isLoggedIn", "true"); // For ChatWidget compatibility
+        localStorage.setItem("userEmail", email);
+        // Fetch user details after login
+        try {
+          const query = `query { customer(customerAccessToken: "${accessToken}") { firstName lastName email phone } }`;
+          const userRes = await fetch(
+            `https://${SHOPIFY_DOMAIN}/api/2023-07/graphql.json`,
+            {
+              method: "POST",
+              headers: {
+                "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ query }),
+            }
+          );
+          const userData = await userRes.json();
+          if (userData.data && userData.data.customer) {
+            sessionStorage.setItem(
+              "shopifyUser",
+              JSON.stringify(userData.data.customer)
+            );
+          }
+        } catch (e) {
+          // Ignore user fetch error, profile page will handle it
+        }
+        window.alert("User login successful");
+        // Redirect to chat if needed
+        if (localStorage.getItem("redirectAfterLogin") === "chat") {
+          localStorage.removeItem("redirectAfterLogin");
+          localStorage.setItem("openChatAfterReload", "true");
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
+        } else {
+          navigate("/");
+        }
+      }
+    } catch (err) {
+      setError("Login failed.");
     }
   };
-
-  } catch (err) {
-    setError("Login failed.");
-  }
-};
 
   return (
     <div className="w-full h-screen flex items-center justify-center">

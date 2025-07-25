@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const SHOPIFY_DOMAIN = "0rdi0c-b0.myshopify.com";
-const SHOPIFY_STOREFRONT_TOKEN = "bbb6212a97cc1d9a15d89ec3cbfa92a1";
+const SHOPIFY_DOMAIN = "n5ycpj-wu.myshopify.com";
+const SHOPIFY_STOREFRONT_TOKEN = "8d91ced9b9dc8eb6c38c314e9eb73c8d";
 
 export const getPaginationItems = async () => {
   const query = `
@@ -60,7 +60,7 @@ export const getPaginationItems = async () => {
         color: "Blank and White",
         badge: true,
         des: product.description || "",
-        category: product.productType || "",// Adding an index as id for simplicity
+        category: product.productType || "", // Adding an index as id for simplicity
       };
     });
     return products;
