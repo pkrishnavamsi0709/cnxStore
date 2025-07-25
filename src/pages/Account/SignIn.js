@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { logoLight } from "../../assets/images";
+import { shopifyLogin } from "../../constants/shopifyAuth";
+import { useNavigate } from "react-router-dom";
+import { SHOPIFY_DOMAIN, SHOPIFY_STOREFRONT_TOKEN } from "../../constants/shopifyAuth";
 
 const SignIn = () => {
   // ============= Initial State Start here =============
@@ -13,36 +16,43 @@ const SignIn = () => {
   const [errPassword, setErrPassword] = useState("");
 
   // ============= Error Msg End here ===================
-  const [successMsg, setSuccessMsg] = useState("");
-  // ============= Event Handler Start here =============
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-    setErrEmail("");
-  };
-  const handlePassword = (e) => {
-    setPassword(e.target.value);
-    setErrPassword("");
-  };
-  // ============= Event Handler End here ===============
-  const handleSignUp = (e) => {
-    e.preventDefault();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-    if (!email) {
-      setErrEmail("Enter your email");
+const handleSubmit = async (formData) => {
+  setError("");
+  try {
+    const res = await shopifyLogin(formData);
+    if (res.data.customerAccessTokenCreate.customerUserErrors.length) {
+      setError(res.data.customerAccessTokenCreate.customerUserErrors[0].message);
+    } else {
+      const accessToken = res.data.customerAccessTokenCreate.customerAccessToken.accessToken;
+      sessionStorage.setItem("shopifyAccessToken", accessToken);
+      // Fetch user details after login
+      try {
+        const query = `query { customer(customerAccessToken: "${accessToken}") { firstName lastName email phone } }`;
+        const userRes = await fetch(`https://${SHOPIFY_DOMAIN}/api/2023-07/graphql.json`, {
+          method: 'POST',
+          headers: {
+            'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_TOKEN,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query })
+        });
+        const userData = await userRes.json();
+        if (userData.data && userData.data.customer) {
+          sessionStorage.setItem('shopifyUser', JSON.stringify(userData.data.customer));
+        }
+      } catch (e) {
+        // Ignore user fetch error, profile page will handle it
+      }
+      window.alert("User login successful");
+      navigate("/");
     }
-
-    if (!password) {
-      setErrPassword("Create a password");
-    }
-    // ============== Getting the value ==============
-    if (email && password) {
-      setSuccessMsg(
-        `Hello dear, Thank you for your attempt. We are processing to validate your access. Till then stay connected and additional assistance will be sent to you by your mail at ${email}`
-      );
-      setEmail("");
-      setPassword("");
-    }
-  };
+  } catch (err) {
+    setError("Login failed.");
+  }
+};
   return (
     <div className="w-full h-screen flex items-center justify-center">
       <div className="w-1/2 hidden lgl:inline-flex h-full text-white">
@@ -114,10 +124,10 @@ const SignIn = () => {
         </div>
       </div>
       <div className="w-full lgl:w-1/2 h-full">
-        {successMsg ? (
+        {error ? (
           <div className="w-full lgl:w-[500px] h-full flex flex-col justify-center">
-            <p className="w-full px-4 py-10 text-green-500 font-medium font-titleFont">
-              {successMsg}
+            <p className="w-full px-4 py-10 text-red-500 font-medium font-titleFont">
+              {error}
             </p>
             <Link to="/signup">
               <button
@@ -141,7 +151,10 @@ const SignIn = () => {
                     Work Email
                   </p>
                   <input
-                    onChange={handleEmail}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setErrEmail("");
+                    }}
                     value={email}
                     className="w-full h-8 placeholder:text-sm placeholder:tracking-wide px-4 text-base font-medium placeholder:font-normal rounded-md border-[1px] border-gray-400 outline-none"
                     type="email"
@@ -161,7 +174,10 @@ const SignIn = () => {
                     Password
                   </p>
                   <input
-                    onChange={handlePassword}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setErrPassword("");
+                    }}
                     value={password}
                     className="w-full h-8 placeholder:text-sm placeholder:tracking-wide px-4 text-base font-medium placeholder:font-normal rounded-md border-[1px] border-gray-400 outline-none"
                     type="password"
@@ -176,7 +192,10 @@ const SignIn = () => {
                 </div>
 
                 <button
-                  onClick={handleSignUp}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSubmit({ email, password });
+                  }}
                   className="bg-primeColor hover:bg-black text-gray-200 hover:text-white cursor-pointer w-full text-base font-medium h-10 rounded-md  duration-300"
                 >
                   Sign In

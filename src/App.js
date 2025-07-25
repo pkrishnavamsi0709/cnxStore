@@ -23,6 +23,8 @@ import Offer from "./pages/Offer/Offer";
 import Payment from "./pages/payment/Payment";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Shop from "./pages/Shop/Shop";
+import Orders from "./pages/Account/Orders";
+import Profile from "./pages/Account/Profile";
 
 loadpaginationItems().then(() => {
   console.log("Pagination items loaded successfully");
@@ -53,6 +55,8 @@ const router = createBrowserRouter(
         <Route path="/about" element={<About />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/journal" element={<Journal />}></Route>
+        <Route path="/orders" element={<Orders />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
         {/* ==================== Header Navlink End here ===================== */}
         <Route path="/offer" element={<Offer />}></Route>
         <Route path="/product/:_id" element={<ProductDetails />}></Route>
