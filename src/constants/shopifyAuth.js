@@ -3,7 +3,12 @@ import axios from "axios";
 export const SHOPIFY_DOMAIN = "n5ycpj-wu.myshopify.com";
 export const SHOPIFY_STOREFRONT_TOKEN = "8d91ced9b9dc8eb6c38c314e9eb73c8d";
 
-export async function shopifyRegister({ email, password, firstName, lastName }) {
+export async function shopifyRegister({
+  email,
+  password,
+  firstName,
+  lastName,
+}) {
   const query = `
     mutation customerCreate($input: CustomerCreateInput!) {
       customerCreate(input: $input) {
@@ -72,6 +77,7 @@ export async function shopifyLogin({ email, password }) {
       },
     }
   );
+  console.log(response.data);
   return response.data;
 }
 
@@ -126,4 +132,3 @@ export async function shopifyGetCustomerOrders(accessToken) {
   );
   return response.data;
 }
-

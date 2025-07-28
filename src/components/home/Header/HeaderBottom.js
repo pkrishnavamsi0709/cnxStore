@@ -79,11 +79,11 @@ const HeaderBottom = () => {
           </div>
           {/* Custom CTA Search Bar */}
           <div
-            className="relative w-full lg:w-[350px] h-[50px] flex items-center justify-between px-6 rounded-full border-2 border-blue-300 bg-gray-200 cursor-pointer shadow-lg group transition-all duration-200"
+            className="relative w-full lg:w-[470px] h-[50px] flex items-center justify-between px-6 rounded-full border-2 border-blue-300 bg-gray-200 cursor-pointer shadow-lg group transition-all duration-200"
             onClick={() => window.dispatchEvent(new Event("openChatWidget"))}
           >
             <span className="text-blue-900 font-semibold text-base select-none ">
-              Experience CNX AI
+              Experience CNX STORE
             </span>
             <span className="flex items-center justify-center ml-3">
               {/* Voice/Waveform Icon SVG */}
