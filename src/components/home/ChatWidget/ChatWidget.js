@@ -178,7 +178,9 @@ const ChatWidget = () => {
           ],
         },
       ];
-      if (!Array.isArray(products) || products.length === 0) {
+      const usingDummyProducts =
+        !Array.isArray(products) || products.length === 0;
+      if (usingDummyProducts) {
         products = dummyProducts;
       }
       setLoadingProducts(false);
@@ -190,10 +192,17 @@ const ChatWidget = () => {
           .map((m) => m.isLoading)
           .lastIndexOf(true);
         if (lastLoadingIdx !== -1) {
-          newMsgs[lastLoadingIdx] = {
-            from: "bot",
-            text: "Here are the products matching your search:",
-          };
+          if (!usingDummyProducts) {
+            newMsgs[lastLoadingIdx] = {
+              from: "bot",
+              text: "Here are the products matching your search:",
+            };
+          } else {
+            newMsgs[lastLoadingIdx] = {
+              from: "bot",
+              text: "Sorry, No products found for your search. Here are some products for you to choose from",
+            };
+          }
         }
         return newMsgs;
       });
@@ -634,8 +643,10 @@ const ChatWidget = () => {
                               </span>
                             )}
                             {/* Insert product grid immediately after the search result message */}
-                            {msg.text ===
-                              "Here are the products matching your search:" &&
+                            {(msg.text ===
+                              "Here are the products matching your search:" ||
+                              msg.text ===
+                                "Sorry, No products found for your search. Here are some products for you to choose from") &&
                               products.length > 0 && (
                                 <div className="mt-6">
                                   <div className="mb-2 font-semibold text-blue-900">
