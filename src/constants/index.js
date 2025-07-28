@@ -3,11 +3,11 @@ import { getPaginationItems } from "./fetchProducts";
 
 // =================== NavBarList Start here ====================
 export const navBarList = [
-  {
-    _id: 1001,
-    title: "Home",
-    link: "/",
-  },
+  // {
+  //   _id: 1001,
+  //   title: "Home",
+  //   link: "/",
+  // },
   {
     _id: 1002,
     title: "Shop",
@@ -25,11 +25,16 @@ export const navBarList = [
   },
   {
     _id: 1005,
-    title: "Journal",
-    link: "/journal",
+    title: "News",
+    link: "/news",
   },
     {
     _id: 1006,
+    title: "Offers",
+    link: "/offers",
+  },
+      {
+    _id: 1007,
     title: "Orders",
     link: "/orders",
   },
