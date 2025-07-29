@@ -232,7 +232,7 @@ const ChatWidget = () => {
           body: JSON.stringify({
             user_id: "parvathi.somanahalli@gmail.com",
             agent_id: "6880f7a1172d1544aaa2f698",
-            session_id: "6880f7a1172d1544aaa2f698-pw5vk0zcp0p",
+            session_id: "6880f7a1172d1544aaa2f698-5xlqk1gh5lu",
             message: userInput, // order ID
           }),
         });
@@ -300,7 +300,7 @@ const ChatWidget = () => {
           body: JSON.stringify({
             user_id: "parvathi.somanahalli@gmail.com",
             agent_id: "68822554172d1544aaa30354",
-            session_id: "68822554172d1544aaa30354-u13l1cpgcsp",
+            session_id: "68822554172d1544aaa30354-qabjmzcsky",
             message: userInput,
           }),
         });
@@ -405,12 +405,12 @@ const ChatWidget = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": "sk-default-mjyJEOkWFUTES3y4SXmJpr3NjDwMhOhx",
+            "x-api-key": "sk-default-xKEgU0gl9uFfQliUrn6sNZzCoqVY9Kl1",
           },
           body: JSON.stringify({
-            user_id: "cnxedgeservicedemo@gmail.com",
-            agent_id: "687f46b4c1234207fb33172a",
-            session_id: "687f46b4c1234207fb33172a-0vws9vb2kjwa",
+            user_id: "parvathi.somanahalli@concentrix.com",
+            agent_id: "68872e64c9c08f1592801e0f",
+            session_id: "68872e64c9c08f1592801e0f-23knoh3uucri",
             message: orderMessage,
           }),
         }
