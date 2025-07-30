@@ -1,24 +1,57 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
-import useAboutPageData from "../../constants/AEM_content/aboutPage_content";
 
 const About = () => {
   const location = useLocation();
   const [prevLocation, setPrevLocation] = useState("");
   const [activeTab, setActiveTab] = useState("who-we-are");
-
-  // Use the custom hook
-  const { pageData, loading, error, refetch } = useAboutPageData();
+  const [pageData, setPageData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setPrevLocation(location.state?.data || "");
+    fetchAboutPageData();
   }, [location]);
 
+  // Function to fetch data from Adobe AEM
+  const fetchAboutPageData = async () => {
+    const url =
+      "http://localhost:3001/api/content/concentrixpartnersandboxprogram/us/en/about-page.model.json";
+
+    try {
+      setLoading(true);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setPageData(data);
+      setError(null);
+    } catch (error) {
+      console.error("Error fetching about page:", error);
+      setError("Failed to load page content. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function to extract company information from the response
   const extractCompanyInfo = (data) => {
     try {
       const container =
-        data[":items"]?.root?.[":items"]?.container?.[":items"]?.container?.[":items"];
+        data[":items"]?.root?.[":items"]?.container?.[":items"]?.container?.[
+          ":items"
+        ];
 
       if (container) {
         const companyInfo = {};
@@ -38,7 +71,6 @@ const About = () => {
               .trim();
 
             companyInfo[key] = cleanText;
-            console.log(`Extracted ${key}:`, cleanText);
           }
         });
 
@@ -52,119 +84,75 @@ const About = () => {
     }
   };
 
+  // Get company info from fetched data
   const companyInfo = pageData ? extractCompanyInfo(pageData) : null;
 
-  const extractTabs = (data) => {
-    try {
-      const tabsObj =
-        data[":items"]?.root?.[":items"]?.container?.[":items"]?.container?.[":items"]?.tabs;
+  const tabs = [
+    {
+      id: "who-we-are",
+      label: "Who We Are",
+      content: {
+        title: "Who We Are",
+        description:
+          companyInfo?.text ||
+          "CnxClothing is a premier fashion destination that has been redefining style and elegance since our inception. We are passionate about bringing you the latest trends while maintaining timeless sophistication.",
+        details: [
+          "Founded with a vision to make fashion accessible to everyone",
+          "A team of dedicated fashion enthusiasts and industry experts",
+          "Committed to quality, style, and customer satisfaction",
+          "Serving customers worldwide with premium clothing collections",
+        ],
+      },
+    },
+    {
+      id: "what-we-do",
+      label: "What We Do",
+      content: {
+        title: "What We Do",
+        description:
+          companyInfo?.text_165213283 ||
+          "We curate and design exceptional clothing collections that blend contemporary fashion with classic elegance. Our mission is to empower individuals through style.",
+        details: [
+          "Design and manufacture high-quality clothing for all occasions",
+          "Source premium materials from trusted suppliers globally",
+          "Provide personalized styling advice and customer support",
+          "Offer seamless online shopping experience with fast delivery",
+        ],
+      },
+    },
+    {
+      id: "our-place",
+      label: "Our Place",
+      content: {
+        title: "Our Place in Fashion",
+        description:
+          "We've established ourselves as a trusted name in the fashion industry, bridging the gap between luxury and accessibility while maintaining our commitment to excellence.",
+        details: [
+          "Recognized leader in contemporary fashion retail",
+          "Strong presence in both online and offline markets",
+          "Partnerships with renowned designers and brands",
+          "Growing community of fashion-forward customers worldwide",
+        ],
+      },
+    },
+    {
+      id: "our-impact",
+      label: "Our Impact",
+      content: {
+        title: "Our Impact",
+        description:
+          "We believe in making a positive difference in the world through sustainable practices, ethical sourcing, and community engagement.",
+        details: [
+          "Committed to sustainable and eco-friendly manufacturing processes",
+          "Supporting local artisans and fair trade practices",
+          "Reducing environmental footprint through responsible packaging",
+          "Contributing to community development and social causes",
+        ],
+      },
+    },
+  ];
 
-      if (!tabsObj || !tabsObj[":itemsOrder"]) return [];
-
-      return tabsObj[":itemsOrder"].map((itemKey) => {
-        const item = tabsObj[":items"]?.[itemKey];
-        if (!item) return null;
-
-        // Get title and text objects
-        const titleObj = item[":items"]?.title;
-        const textObj = item[":items"]?.text;
-
-        // Extract title
-        const title = titleObj?.text || "";
-
-        // Extract description (first <p>...</p>)
-        let description = "";
-        let details = [];
-        if (textObj?.text) {
-          // Match first <p>...</p>
-          const pMatch = textObj.text.match(/<p>(.*?)<\/p>/i);
-          description = pMatch ? pMatch[1].replace(/<[^>]+>/g, "") : "";
-
-          // Match all <li>...</li>
-          const liMatches = [...textObj.text.matchAll(/<li>(.*?)<\/li>/gi)];
-          details = liMatches.map((m) => m[1].replace(/<[^>]+>/g, ""));
-        }
-
-        return {
-          id: itemKey,
-          label: title,
-          title,
-          description,
-          details,
-        };
-      }).filter(Boolean);
-    } catch (error) {
-      console.error("Error extracting tabs:", error);
-      return [];
-    }
-  };
-
-  const tabs = pageData ? extractTabs(pageData) : [];
-
-  console.log("Extracted tabs:", JSON.stringify(tabs, null, 2));
-
-  // const tabs = [
-  //   {
-  //     id: "who-we-are",
-  //     label: "Who We Are",
-  //     content: {
-  //       title: "Who We Are",
-  //       description: "CnxClothing is a premier fashion destination that has been redefining style and elegance since our inception. We are passionate about bringing you the latest trends while maintaining timeless sophistication.",
-  //       details: [
-  //         "Founded with a vision to make fashion accessible to everyone",
-  //         "A team of dedicated fashion enthusiasts and industry experts",
-  //         "Committed to quality, style, and customer satisfaction",
-  //         "Serving customers worldwide with premium clothing collections",
-  //       ],
-  //     },
-  //   },
-  //   {
-  //     id: "what-we-do",
-  //     label: "What We Do",
-  //     content: {
-  //       title: "What We Do",
-  //       description: "We curate and design exceptional clothing collections that blend contemporary fashion with classic elegance. Our mission is to empower individuals through style.",
-  //       details: [
-  //         "Design and manufacture high-quality clothing for all occasions",
-  //         "Source premium materials from trusted suppliers globally",
-  //         "Provide personalized styling advice and customer support",
-  //         "Offer seamless online shopping experience with fast delivery",
-  //       ],
-  //     },
-  //   },
-  //   {
-  //     id: "our-place",
-  //     label: "Our Place",
-  //     content: {
-  //       title: "Our Place in Fashion",
-  //       description:
-  //         "We've established ourselves as a trusted name in the fashion industry, bridging the gap between luxury and accessibility while maintaining our commitment to excellence.",
-  //       details: [
-  //         "Recognized leader in contemporary fashion retail",
-  //         "Strong presence in both online and offline markets",
-  //         "Partnerships with renowned designers and brands",
-  //         "Growing community of fashion-forward customers worldwide",
-  //       ],
-  //     },
-  //   },
-  //   {
-  //     id: "our-impact",
-  //     label: "Our Impact",
-  //     content: {
-  //       title: "Our Impact",
-  //       description:
-  //         "We believe in making a positive difference in the world through sustainable practices, ethical sourcing, and community engagement.",
-  //       details: [
-  //         "Committed to sustainable and eco-friendly manufacturing processes",
-  //         "Supporting local artisans and fair trade practices",
-  //         "Reducing environmental footprint through responsible packaging",
-  //         "Contributing to community development and social causes",
-  //       ],
-  //     },
-  //   },
-  // ];
-
-  const activeTabContent = tabs.find((tab) => tab.id === activeTab);
+  const activeTabContent = tabs.find((tab) => tab.id === activeTab)?.content;
 
   if (loading) {
     return (
@@ -188,7 +176,7 @@ const About = () => {
           <div className="text-center">
             <p className="text-red-500 mb-4">{error}</p>
             <button
-              onClick={refetch}
+              onClick={fetchAboutPageData}
               className="bg-primeColor text-white px-6 py-2 rounded-md hover:bg-black transition-colors duration-300"
             >
               Try Again
