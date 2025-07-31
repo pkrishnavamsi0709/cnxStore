@@ -599,10 +599,7 @@ const ChatWidget = () => {
     const variantIds = selectedDetails.map((d) => d.variantId).join(", ");
     // Always use dummy email for orders
     const loggedInUserEmail = "kiran@gmail.com";
-    const orderMessage =
-      "Order These products: variant ID = " +
-      variantIds +
-      ', email = "kiran@gmail.com"';
+    const orderMessage ='Order These products: variant ID = ' + variantIds + ', email = "kiran@gmail.com"';
     // Call the product search API as the order API
     try {
       const response = await fetch(
