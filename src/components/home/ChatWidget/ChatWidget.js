@@ -28,7 +28,7 @@ const ChatWidget = () => {
   const contextOptions = [
     { label: "General Queries", value: "support" },
     { label: "Search And Order", value: "products" },
-    { label: "Orders Status", value: "orders_status" }
+    { label: "Orders Status", value: "orders_status" },
   ];
 
   React.useEffect(() => {
@@ -616,7 +616,7 @@ const ChatWidget = () => {
             "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
           },
           body: JSON.stringify({
-            user_id: "kiran@gmail.com",
+            user_id: "parvathi.somanahalli@gmail.com",
             agent_id: "68822554172d1544aaa30354",
             session_id: "68822554172d1544aaa30354-qabjmzcsky",
             message: orderMessage,
