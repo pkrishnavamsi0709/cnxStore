@@ -101,223 +101,226 @@ const ChatWidget = () => {
 
       let products = [
         {
-          id: 7649629012051,
-          title: "Green T-Shirt",
-          product_type: "Shirts",
+          id: 7650044379219,
+          title: "White Button-Up Shirt",
+          product_type: "clothing",
           variants: [
             {
-              id: 42910880890963,
-              title: "Green / 3XL / Flannel",
-              price: "2500.00",
-              color: "Green",
-              size: "3XL",
-              fabric: "Flannel",
-              quantityAvailable: 27,
-              availableForSale: true,
-              sku: "TSH-GRN-3XL-FLAN",
-            },
-            {
-              id: 42910880923731,
-              title: "Green / 2XL / Flannel",
-              price: "2500.00",
-              color: "Green",
-              size: "2XL",
-              fabric: "Flannel",
-              quantityAvailable: 27,
-              availableForSale: true,
-              sku: "TSH-GRN-2XL-FLAN",
-            },
-            {
-              id: 42910880956499,
-              title: "Green / XS / Flannel",
-              price: "2500.00",
-              color: "Green",
-              size: "XS",
-              fabric: "Flannel",
-              quantityAvailable: 27,
-              availableForSale: true,
-              sku: "TSH-GRN-XS-FLAN",
-            },
-          ],
-          images: [
-            {
-              id: 45822922850521,
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/5173-4087-41c1-9349-c47432ac6d30.jpg?v=1753089634",
-              altText: "T-shirt",
-            },
-          ],
-        },
-        {
-          id: 7649629012052,
-          title: "Premium Cotton T-Shirt",
-          product_type: "Shirts",
-          variants: [
-            {
-              id: 42910880890964,
-              title: "White / Small / Cotton",
-              price: "1800.00",
-              color: "White",
-              size: "Small",
+              id: 42910842454099,
+              title: "Holographic / S / Cotton",
+              price: "2234.99",
+              color: "Holographic",
+              size: "S",
               fabric: "Cotton",
-              quantityAvailable: 45,
-              availableForSale: true,
-              sku: "TSH-WHT-S-COT",
-            },
-            {
-              id: 42910880923732,
-              title: "White / Medium / Cotton",
-              price: "1800.00",
-              color: "White",
-              size: "Medium",
-              fabric: "Cotton",
-              quantityAvailable: 38,
-              availableForSale: true,
-              sku: "TSH-WHT-M-COT",
-            },
-            {
-              id: 42910880956500,
-              title: "White / Large / Cotton",
-              price: "1800.00",
-              color: "White",
-              size: "Large",
-              fabric: "Cotton",
-              quantityAvailable: 32,
-              availableForSale: true,
-              sku: "TSH-WHT-L-COT",
-            },
-            {
-              id: 42910880956501,
-              title: "White / XL / Cotton",
-              price: "1800.00",
-              color: "White",
-              size: "XL",
-              fabric: "Cotton",
-              quantityAvailable: 28,
-              availableForSale: true,
-              sku: "TSH-WHT-XL-COT",
-            },
-          ],
-          images: [
-            {
-              id: 45822922850522,
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/white-cotton-tshirt.jpg?v=1753089635",
-              altText: "White Cotton T-shirt",
-            },
-          ],
-        },
-        {
-          id: 7649629012053,
-          title: "Classic Blue T-Shirt",
-          product_type: "Shirts",
-          variants: [
-            {
-              id: 42910880890965,
-              title: "Blue / Small / Jersey",
-              price: "2200.00",
-              color: "Blue",
-              size: "Small",
-              fabric: "Jersey",
-              quantityAvailable: 25,
-              availableForSale: true,
-              sku: "TSH-BLU-S-JER",
-            },
-            {
-              id: 42910880923733,
-              title: "Blue / Medium / Jersey",
-              price: "2200.00",
-              color: "Blue",
-              size: "Medium",
-              fabric: "Jersey",
-              quantityAvailable: 30,
-              availableForSale: true,
-              sku: "TSH-BLU-M-JER",
-            },
-            {
-              id: 42910880956502,
-              title: "Blue / Large / Jersey",
-              price: "2200.00",
-              color: "Blue",
-              size: "Large",
-              fabric: "Jersey",
-              quantityAvailable: 22,
-              availableForSale: true,
-              sku: "TSH-BLU-L-JER",
-            },
-            {
-              id: 42910880956503,
-              title: "Blue / XL / Jersey",
-              price: "2200.00",
-              color: "Blue",
-              size: "XL",
-              fabric: "Jersey",
-              quantityAvailable: 18,
-              availableForSale: true,
-              sku: "TSH-BLU-XL-JER",
-            },
-          ],
-          images: [
-            {
-              id: 45822922850523,
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/blue-jersey-tshirt.jpg?v=1753089636",
-              altText: "Blue Jersey T-shirt",
-            },
-          ],
-        },
-        {
-          id: 7649629012054,
-          title: "Black Premium T-Shirt",
-          product_type: "Shirts",
-          variants: [
-            {
-              id: 42910880890966,
-              title: "Black / Small / Premium Cotton",
-              price: "2800.00",
-              color: "Black",
-              size: "Small",
-              fabric: "Premium Cotton",
-              quantityAvailable: 20,
-              availableForSale: true,
-              sku: "TSH-BLK-S-PRE",
-            },
-            {
-              id: 42910880923734,
-              title: "Black / Medium / Premium Cotton",
-              price: "2800.00",
-              color: "Black",
-              size: "Medium",
-              fabric: "Premium Cotton",
-              quantityAvailable: 25,
-              availableForSale: true,
-              sku: "TSH-BLK-M-PRE",
-            },
-            {
-              id: 42910880956504,
-              title: "Black / Large / Premium Cotton",
-              price: "2800.00",
-              color: "Black",
-              size: "Large",
-              fabric: "Premium Cotton",
-              quantityAvailable: 18,
-              availableForSale: true,
-              sku: "TSH-BLK-L-PRE",
-            },
-            {
-              id: 42910880956505,
-              title: "Black / XL / Premium Cotton",
-              price: "2800.00",
-              color: "Black",
-              size: "XL",
-              fabric: "Premium Cotton",
               quantityAvailable: 15,
               availableForSale: true,
-              sku: "TSH-BLK-XL-PRE",
+              sku: "FDSAGREGF3",
+            },
+            {
+              id: 42910842486867,
+              title: "Holographic / L / Cotton",
+              price: "2234.99",
+              color: "Holographic",
+              size: "L",
+              fabric: "Cotton",
+              quantityAvailable: 15,
+              availableForSale: true,
+              sku: "FDSAGREGF4",
+            },
+            {
+              id: 42910842519635,
+              title: "Holographic / M / Cotton",
+              price: "2234.99",
+              color: "Holographic",
+              size: "M",
+              fabric: "Cotton",
+              quantityAvailable: 15,
+              availableForSale: true,
+              sku: "FDSAGREGF5",
             },
           ],
           images: [
             {
-              id: 45822922850524,
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/black-premium-tshirt.jpg?v=1753089637",
-              altText: "Black Premium T-shirt",
+              id: 0, // No image ID provided, assigning 0 as placeholder
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/person-in-a-white-shirt-stands-by-the-water.jpg?v=1753181507",
+              altText: "White Button-Up Shirt",
+            },
+          ],
+        },
+        {
+          id: 7650044411987,
+          title: "Bearded Man in White Shirt",
+          product_type: "clothing",
+          variants: [
+            {
+              id: 42910831673427,
+              title: "White / 3XL / Cotton",
+              price: "3552.50",
+              color: "White",
+              size: "3XL",
+              fabric: "Cotton",
+              quantityAvailable: 33,
+              availableForSale: true,
+              sku: "FSGDGREE3",
+            },
+            {
+              id: 42910831706195,
+              title: "White / XS / Cotton",
+              price: "3552.50",
+              color: "White",
+              size: "XS",
+              fabric: "Cotton",
+              quantityAvailable: 33,
+              availableForSale: true,
+              sku: "FSGDGREE4",
+            },
+            {
+              id: 42910831738963,
+              title: "White / 2XL / Cotton",
+              price: "3552.50",
+              color: "White",
+              size: "2XL",
+              fabric: "Cotton",
+              quantityAvailable: 33,
+              availableForSale: true,
+              sku: "FSGDGREE5",
+            },
+          ],
+          images: [
+            {
+              id: 0, // Image ID is not present in your data, so keeping 0 as placeholder
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/Screenshot2025-07-22155041.png?v=1753181568",
+              altText: "Bearded Man in White Shirt",
+            },
+          ],
+        },
+        {
+          id: 7650046672979,
+          title: "Light Blue Casual Shirt",
+          product_type: "clothing",
+          variants: [
+            {
+              id: 42910670651475,
+              title: "Blue",
+              price: "4578.00",
+              color: "Blue",
+              size: "", // Size not available in the data
+              fabric: "", // Fabric not available in the data
+              quantityAvailable: 9,
+              availableForSale: true,
+              sku: "SDVSGE3FF-1",
+            },
+            {
+              id: 42910670684243,
+              title: "Yellow",
+              price: "4578.00",
+              color: "Yellow",
+              size: "", // Size not available in the data
+              fabric: "", // Fabric not available in the data
+              quantityAvailable: 20,
+              availableForSale: true,
+              sku: "SDVSGE3FF-2",
+            },
+          ],
+          images: [
+            {
+              id: 0,
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/Screenshot2025-07-22163017.png?v=1753182448",
+              altText: "Light Blue Casual Shirt",
+            },
+          ],
+        },
+        {
+          id: 7650056536147,
+          title: "Embroidered White Satin Shirt",
+          product_type: "Clothing",
+          variants: [
+            {
+              id: 42910454415443,
+              title: "Floral / 3XL / Satin",
+              price: "48.50",
+              color: "Floral",
+              size: "3XL",
+              fabric: "Satin",
+              quantityAvailable: 12,
+              availableForSale: true,
+              sku: "WMN-FLORAL-WHITE-001",
+            },
+            {
+              id: 42910454448211,
+              title: "Floral / XS / Satin",
+              price: "48.50",
+              color: "Floral",
+              size: "XS",
+              fabric: "Satin",
+              quantityAvailable: 12,
+              availableForSale: true,
+              sku: "WMN-FLORAL-WHITE-002",
+            },
+            {
+              id: 42910454480979,
+              title: "Floral / 2XL / Satin",
+              price: "48.50",
+              color: "Floral",
+              size: "2XL",
+              fabric: "Satin",
+              quantityAvailable: 12,
+              availableForSale: true,
+              sku: "WMN-FLORAL-WHITE-003",
+            },
+          ],
+          images: [
+            {
+              id: 0,
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/Screenshot2025-07-22170946.png?v=1753185144",
+              altText: "Embroidered White Satin Shirt",
+            },
+          ],
+        },
+        {
+          id: 7649959870547,
+          title: "White shirt",
+          product_type: "clothing",
+          variants: [
+            {
+              id: 42910876794963,
+              title: "White / 3XL / Cotton",
+              price: "8760.0",
+              color: "White",
+              size: "3XL",
+              fabric: "Cotton",
+              quantityAvailable: 33,
+              availableForSale: true,
+              sku: "DFGHBVCX1",
+            },
+            {
+              id: 42910876827731,
+              title: "White / 3XL / Faux fur",
+              price: "8760.0",
+              color: "White",
+              size: "3XL",
+              fabric: "Faux fur",
+              quantityAvailable: 33,
+              availableForSale: true,
+              sku: "DFGHBVCX2",
+            },
+            {
+              id: 42910876860499,
+              title: "White / XS / Cotton",
+              price: "8760.0",
+              color: "White",
+              size: "XS",
+              fabric: "Cotton",
+              quantityAvailable: 33,
+              availableForSale: true,
+              sku: "DFGHBVCX3",
+            },
+          ],
+          images: [
+            {
+              id: 0,
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/person-in-a-white-shirt-walks-across-the-street.jpg?v=1753159395",
+              altText: "White shirt",
             },
           ],
         },
@@ -513,7 +516,7 @@ const ChatWidget = () => {
             "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
           },
           body: JSON.stringify({
-            user_id: "kiran@gmail.com",
+            user_id: "parvathi.somanahalli@gmail.com",
             agent_id: "68822554172d1544aaa30354",
             session_id: "68822554172d1544aaa30354-qabjmzcsky",
             message: userInput,
@@ -610,26 +613,49 @@ const ChatWidget = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": "sk-default-xKEgU0gl9uFfQliUrn6sNZzCoqVY9Kl1",
+            "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
           },
           body: JSON.stringify({
-            user_id: "parvathi.somanahalli@concentrix.com",
-            agent_id: "68872e64c9c08f1592801e0f",
-            session_id: "68872e64c9c08f1592801e0f-23knoh3uucri",
+            user_id: "kiran@gmail.com",
+            agent_id: "68822554172d1544aaa30354",
+            session_id: "68822554172d1544aaa30354-qabjmzcsky",
             message: orderMessage,
           }),
         }
       );
       const data = await response.json();
+      console.log("Order API Response:", data); // Debug log
+
       let orderResultObj = data;
       if (typeof data.response === "string") {
         try {
           orderResultObj = JSON.parse(data.response);
+          console.log("Parsed order result:", orderResultObj); // Debug log
         } catch (e) {
+          console.error("Error parsing response:", e); // Debug log
           orderResultObj = data;
         }
       }
+
+      // Check if order was created successfully - handle different response formats
+      let orderData = null;
+
       if (orderResultObj.order_created) {
+        orderData = orderResultObj.order_created;
+      } else if (orderResultObj.response) {
+        try {
+          const parsedResponse = JSON.parse(orderResultObj.response);
+          if (parsedResponse.order_created) {
+            orderData = parsedResponse.order_created;
+          }
+        } catch (e) {
+          console.error("Error parsing response.order_created:", e);
+        }
+      }
+
+      if (orderData) {
+        console.log("Order created successfully:", orderData); // Debug log
+
         setMessages((msgs) => {
           let newMsgs = [...msgs];
           while (newMsgs.length && newMsgs[newMsgs.length - 1].isLoading) {
@@ -638,7 +664,7 @@ const ChatWidget = () => {
           newMsgs.push({
             from: "bot",
             isOrderCreated: true,
-            orderCreatedObj: orderResultObj.order_created,
+            orderCreatedObj: orderData,
           });
           newMsgs.push({
             from: "bot",
@@ -648,6 +674,39 @@ const ChatWidget = () => {
         });
         setOrderResult(null);
       } else {
+        console.log("Order creation failed:", orderResultObj); // Debug log
+
+        // Try to extract order information from the response even if parsing failed
+        if (orderResultObj.response) {
+          try {
+            const responseText = orderResultObj.response;
+            if (
+              responseText.includes("order_created") &&
+              responseText.includes("id")
+            ) {
+              // Show a generic success message with the response
+              setMessages((msgs) => {
+                let newMsgs = [...msgs];
+                while (
+                  newMsgs.length &&
+                  newMsgs[newMsgs.length - 1].isLoading
+                ) {
+                  newMsgs.pop();
+                }
+                newMsgs.push({
+                  from: "bot",
+                  text: "Order placed successfully! Check the response details in the console for order information.",
+                });
+                return newMsgs;
+              });
+              setOrderResult(null);
+              return;
+            }
+          } catch (e) {
+            console.error("Error processing response:", e);
+          }
+        }
+
         setOrderResult(
           orderResultObj.message || "Failed to place order. Please try again."
         );
