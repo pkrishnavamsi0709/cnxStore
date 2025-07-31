@@ -240,6 +240,29 @@ const About = () => {
           </div>
         </div>
 
+                {/* Statistics Section */}
+        <div className="mt-12 bg-primeColor text-white rounded-lg p-8">
+          <h3 className="text-2xl font-bold mb-6 text-center">CNX Store by Numbers</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div className="text-3xl font-bold">2M+</div>
+              <div className="text-sm opacity-90">Happy Customers</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold">1000+</div>
+              <div className="text-sm opacity-90">Brand Partners</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold">50+</div>
+              <div className="text-sm opacity-90">Cities Served</div>
+            </div>
+            <div>
+              <div className="text-3xl font-bold">96%</div>
+              <div className="text-sm opacity-90">Customer Satisfaction</div>
+            </div>
+          </div>
+        </div>
+
         {/* Call to Action */}
         <div className="mt-12 text-center">
           <p className="text-lg text-lightText mb-6">
