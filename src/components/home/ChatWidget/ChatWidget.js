@@ -450,7 +450,7 @@ const ChatWidget = () => {
           body: JSON.stringify({
             user_id: "parvathi.somanahalli@gmail.com",
             agent_id: "6880f7a1172d1544aaa2f698",
-            session_id: "6880f7a1172d1544aaa2f698-5xlqk1gh5lu",
+            session_id: "6880f7a1172d1544aaa2f698-49xbpm1oky",
             message: userInput, // order ID
           }),
         });
@@ -513,12 +513,12 @@ const ChatWidget = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
+            "x-api-key": "sk-default-Z356WiepycVLZRfVcTvyUMmkBL0lIC6n",
           },
           body: JSON.stringify({
-            user_id: "parvathi.somanahalli@gmail.com",
-            agent_id: "68822554172d1544aaa30354",
-            session_id: "68822554172d1544aaa30354-qabjmzcsky",
+            user_id: "parvathisomanahalli@gmail.com",
+            agent_id: "688b2d834bb02b79e0fc9be7",
+            session_id: "688b2d834bb02b79e0fc9be7-1of90dp2fyq",
             message: userInput,
           }),
         });
