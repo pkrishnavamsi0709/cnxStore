@@ -611,7 +611,7 @@ const ChatWidget = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
+            "x-api-key": "sk-default-xKEgU0gl9uFfQliUrn6sNZzCoqVY9Kl1",
           },
           body: JSON.stringify({
             user_id: "parvathi.somanahalli@concentrix.com",
