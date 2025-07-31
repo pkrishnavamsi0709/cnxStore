@@ -7,7 +7,7 @@ const useAboutPageContent = () => {
 
   const fetchAboutPageData = async () => {
     const url =
-      "http://localhost:3001/api/content/concentrixpartnersandboxprogram/us/en/about-page.model.json";
+      "https://publish-p92368-e968987.adobeaemcloud.com/content/concentrixpartnersandboxprogram/us/en/about-page.model.json";
 
     try {
       setLoading(true);
