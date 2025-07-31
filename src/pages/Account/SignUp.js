@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { BsCheckCircleFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logoLight } from "../../assets/images";
 import { shopifyRegister } from "../../constants/shopifyAuth";
-import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   // ============= Initial State Start here =============
@@ -78,69 +77,69 @@ const SignUp = () => {
   };
   // ================= Email Validation End here ===============
 
-const handleSignUp = async (e) => {
-  e.preventDefault();
-  if (checked) {
-    let valid = true;
-    if (!clientName) {
-      setErrClientName("Enter your first name");
-      valid = false;
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    if (checked) {
+      let valid = true;
+      if (!clientName) {
+        setErrClientName("Enter your first name");
+        valid = false;
+      }
+      if (!lastName) {
+        setErrLastName("Enter your last name");
+        valid = false;
+      }
+      if (!email) {
+        setErrEmail("Enter your email");
+        valid = false;
+      } else if (!EmailValidation(email)) {
+        setErrEmail("Enter a Valid email");
+        valid = false;
+      }
+      if (!password) {
+        setErrPassword("Create a password");
+        valid = false;
+      } else if (password.length < 6) {
+        setErrPassword("Passwords must be at least 6 characters");
+        valid = false;
+      }
+      // Remove required validation for phone, address, city, country, zip
+      if (valid) {
+        // Call Shopify API
+        await handleSubmit({
+          email,
+          password,
+          firstName: clientName,
+          lastName: lastName,
+        });
+        // Optionally clear fields on success
+        setClientName("");
+        setLastName("");
+        setEmail("");
+        setPhone("");
+        setPassword("");
+        setAddress("");
+        setCity("");
+        setCountry("");
+        setZip("");
+      }
     }
-    if (!lastName) {
-      setErrLastName("Enter your last name");
-      valid = false;
-    }
-    if (!email) {
-      setErrEmail("Enter your email");
-      valid = false;
-    } else if (!EmailValidation(email)) {
-      setErrEmail("Enter a Valid email");
-      valid = false;
-    }
-    if (!password) {
-      setErrPassword("Create a password");
-      valid = false;
-    } else if (password.length < 6) {
-      setErrPassword("Passwords must be at least 6 characters");
-      valid = false;
-    }
-    // Remove required validation for phone, address, city, country, zip
-    if (valid) {
-      // Call Shopify API
-      await handleSubmit({
-        email,
-        password,
-        firstName: clientName,
-        lastName: lastName,
-      });
-      // Optionally clear fields on success
-      setClientName("");
-      setLastName("");
-      setEmail("");
-      setPhone("");
-      setPassword("");
-      setAddress("");
-      setCity("");
-      setCountry("");
-      setZip("");
-    }
-  }
-};
+  };
 
-const handleSubmit = async (formData) => {
-  setError("");
-  try {
-    const res = await shopifyRegister(formData);
-    if (res.data.customerCreate.customerUserErrors.length) {
-      setError(res.data.customerCreate.customerUserErrors[0].message);
-    } else {
-      window.alert("Registration successful! Please login.");
-      navigate("/signin");
+  const handleSubmit = async (formData) => {
+    setError("");
+    try {
+      const res = await shopifyRegister(formData);
+      if (res.data.customerCreate.customerUserErrors.length) {
+        setError(res.data.customerCreate.customerUserErrors[0].message);
+      } else {
+        window.alert("Registration successful! Please login.");
+        navigate("/signin");
+      }
+    } catch (err) {
+      setError("Registration failed.");
     }
-  } catch (err) {
-    setError("Registration failed.");
-  }
-};
+  };
 
   return (
     <div className="w-full h-screen flex items-center justify-start">
@@ -161,7 +160,7 @@ const handleSubmit = async (formData) => {
             </span>
             <p className="text-base text-gray-300">
               <span className="text-white font-semibold font-titleFont">
-                Get started fast with OREBI
+                Get started fast with CNX
               </span>
               <br />
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab omnis
@@ -174,7 +173,7 @@ const handleSubmit = async (formData) => {
             </span>
             <p className="text-base text-gray-300">
               <span className="text-white font-semibold font-titleFont">
-                Access all OREBI services
+                Access all CNX services
               </span>
               <br />
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab omnis
@@ -196,7 +195,7 @@ const handleSubmit = async (formData) => {
           </div>
           <div className="flex items-center justify-between mt-10">
             <p className="text-sm font-titleFont font-semibold text-gray-300 hover:text-white cursor-pointer duration-300">
-              © OREBI
+              © CNX
             </p>
             <p className="text-sm font-titleFont font-semibold text-gray-300 hover:text-white cursor-pointer duration-300">
               Terms
@@ -412,7 +411,7 @@ const handleSubmit = async (formData) => {
                     type="checkbox"
                   />
                   <p className="text-sm text-primeColor">
-                    I agree to the OREBI{" "}
+                    I agree to the CNX{" "}
                     <span className="text-blue-500">Terms of Service </span>and{" "}
                     <span className="text-blue-500">Privacy Policy</span>.
                   </p>

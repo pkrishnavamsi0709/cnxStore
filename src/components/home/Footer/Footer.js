@@ -1,10 +1,19 @@
-import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FaFacebook, FaYoutube, FaLinkedin, FaInstagram, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import React, { useState } from "react";
+import {
+  FaEnvelope,
+  FaFacebook,
+  FaInstagram,
+  FaLinkedin,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaTwitter,
+  FaYoutube,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
-import FooterListTitle from "./FooterListTitle";
 import { paymentCard } from "../../../assets/images";
 import Image from "../../designLayouts/Image";
+import FooterListTitle from "./FooterListTitle";
 
 const Footer = () => {
   const [emailInfo, setEmailInfo] = useState("");
@@ -30,47 +39,47 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { 
-      icon: <FaFacebook />, 
-      url: "https://www.facebook.com/CNXStoreOfficial", 
-      label: "Facebook" 
+    {
+      icon: <FaFacebook />,
+      url: "https://www.facebook.com/CNXStoreOfficial",
+      label: "Facebook",
     },
-    { 
-      icon: <FaInstagram />, 
-      url: "https://www.instagram.com/cnx_store/", 
-      label: "Instagram" 
+    {
+      icon: <FaInstagram />,
+      url: "https://www.instagram.com/cnx_store/",
+      label: "Instagram",
     },
-    { 
-      icon: <FaTwitter />, 
-      url: "https://twitter.com/CNXStore", 
-      label: "Twitter" 
+    {
+      icon: <FaTwitter />,
+      url: "https://twitter.com/CNXStore",
+      label: "Twitter",
     },
-    { 
-      icon: <FaLinkedin />, 
-      url: "https://www.linkedin.com/company/cnx-store-private-limited", 
-      label: "LinkedIn" 
+    {
+      icon: <FaLinkedin />,
+      url: "https://www.linkedin.com/company/cnx-store-private-limited",
+      label: "LinkedIn",
     },
-    { 
-      icon: <FaYoutube />, 
-      url: "https://www.youtube.com/@CNXStoreOfficial", 
-      label: "YouTube" 
-    }
+    {
+      icon: <FaYoutube />,
+      url: "https://www.youtube.com/@CNXStoreOfficial",
+      label: "YouTube",
+    },
   ];
 
   return (
     <div className="w-full bg-[#F5F5F3] py-20">
       <div className="max-w-container mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 px-4 gap-10">
-        
         {/* Company Info Section */}
         <div className="col-span-2">
           <FooterListTitle title="CNX Store - Style. Value. Trust." />
           <div className="flex flex-col gap-6">
             <p className="text-base w-full xl:w-[90%] text-lightText">
-              Your premier fashion destination since 2018. We curate exceptional clothing collections 
-              that blend contemporary fashion with classic elegance, serving 2M+ customers worldwide 
-              with quality, style, and unmatched customer satisfaction.
+              Your premier fashion destination since 2018. We curate exceptional
+              clothing collections that blend contemporary fashion with classic
+              elegance, serving 2M+ customers worldwide with quality, style, and
+              unmatched customer satisfaction.
             </p>
-            
+
             {/* Contact Info */}
             <div className="space-y-2 text-sm text-lightText">
               <div className="flex items-center gap-2">
@@ -89,7 +98,9 @@ const Footer = () => {
 
             {/* Social Media Links */}
             <div>
-              <p className="text-sm font-semibold text-primeColor mb-3">Follow Us</p>
+              <p className="text-sm font-semibold text-primeColor mb-3">
+                Follow Us
+              </p>
               <ul className="flex items-center gap-2">
                 {socialLinks.map((social, index) => (
                   <a
@@ -170,7 +181,8 @@ const Footer = () => {
           <FooterListTitle title="Stay Updated with CNX Store" />
           <div className="w-full">
             <p className="text-center mb-4 text-lightText">
-              Subscribe to get exclusive offers, style tips, and be the first to know about our latest collections and special deals.
+              Subscribe to get exclusive offers, style tips, and be the first to
+              know about our latest collections and special deals.
             </p>
             {subscription ? (
               <motion.div
@@ -183,7 +195,8 @@ const Footer = () => {
                   🎉 Welcome to CNX Store Family!
                 </p>
                 <p className="text-sm text-lightText">
-                  You'll receive exclusive offers and style updates straight to your inbox.
+                  You'll receive exclusive offers and style updates straight to
+                  your inbox.
                 </p>
               </motion.div>
             ) : (
@@ -213,7 +226,9 @@ const Footer = () => {
 
             {/* Payment Methods */}
             <div className="mt-6">
-              <p className="text-center text-sm text-lightText mb-3">Secure Payment Methods</p>
+              <p className="text-center text-sm text-lightText mb-3">
+                Secure Payment Methods
+              </p>
               <Image
                 className={`w-[80%] lg:w-[60%] mx-auto ${
                   subscription ? "mt-2" : ""
