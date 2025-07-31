@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { useNavigate } from "react-router-dom";
 
 const CHAT_HISTORY_KEY = "chatWidgetHistory";
 
@@ -11,8 +10,6 @@ const getInitialMessages = () => [
 
 const ChatWidget = () => {
   const [open, setOpen] = React.useState(false);
-  const [showLoginPrompt, setShowLoginPrompt] = React.useState(false); // NEW: show login modal
-  const navigate = useNavigate(); // NEW: for redirecting to login
   const [messages, setMessages] = React.useState(getInitialMessages);
   const [input, setInput] = React.useState("");
   const [context, setContext] = React.useState(null); // 'orders', 'products', 'support', etc.
@@ -41,14 +38,10 @@ const ChatWidget = () => {
       localStorage.removeItem("openChatAfterReload");
     }
     const handler = () => {
-      // Check login state before opening chat
-      if (sessionStorage.getItem("shopifyAccessToken")) {
-        setOpen(true);
-      } else {
-        setShowLoginPrompt(true);
-        // Store intended redirect
-        localStorage.setItem("redirectAfterLogin", "chat");
-      }
+      // Always open chat without login requirement
+      setOpen(true);
+      // Set dummy email for API calls
+      localStorage.setItem("userEmail", "kiran@gmail.com");
     };
     window.addEventListener("openChatWidget", handler);
     return () => window.removeEventListener("openChatWidget", handler);
@@ -106,7 +99,229 @@ const ChatWidget = () => {
       setInput("");
       setLoadingProducts(true);
 
-      let products = [];
+      let products = [
+        {
+          id: 7649629012051,
+          title: "Green T-Shirt",
+          product_type: "Shirts",
+          variants: [
+            {
+              id: 42910880890963,
+              title: "Green / 3XL / Flannel",
+              price: "2500.00",
+              color: "Green",
+              size: "3XL",
+              fabric: "Flannel",
+              quantityAvailable: 27,
+              availableForSale: true,
+              sku: "TSH-GRN-3XL-FLAN",
+            },
+            {
+              id: 42910880923731,
+              title: "Green / 2XL / Flannel",
+              price: "2500.00",
+              color: "Green",
+              size: "2XL",
+              fabric: "Flannel",
+              quantityAvailable: 27,
+              availableForSale: true,
+              sku: "TSH-GRN-2XL-FLAN",
+            },
+            {
+              id: 42910880956499,
+              title: "Green / XS / Flannel",
+              price: "2500.00",
+              color: "Green",
+              size: "XS",
+              fabric: "Flannel",
+              quantityAvailable: 27,
+              availableForSale: true,
+              sku: "TSH-GRN-XS-FLAN",
+            },
+          ],
+          images: [
+            {
+              id: 45822922850521,
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/5173-4087-41c1-9349-c47432ac6d30.jpg?v=1753089634",
+              altText: "T-shirt",
+            },
+          ],
+        },
+        {
+          id: 7649629012052,
+          title: "Premium Cotton T-Shirt",
+          product_type: "Shirts",
+          variants: [
+            {
+              id: 42910880890964,
+              title: "White / Small / Cotton",
+              price: "1800.00",
+              color: "White",
+              size: "Small",
+              fabric: "Cotton",
+              quantityAvailable: 45,
+              availableForSale: true,
+              sku: "TSH-WHT-S-COT",
+            },
+            {
+              id: 42910880923732,
+              title: "White / Medium / Cotton",
+              price: "1800.00",
+              color: "White",
+              size: "Medium",
+              fabric: "Cotton",
+              quantityAvailable: 38,
+              availableForSale: true,
+              sku: "TSH-WHT-M-COT",
+            },
+            {
+              id: 42910880956500,
+              title: "White / Large / Cotton",
+              price: "1800.00",
+              color: "White",
+              size: "Large",
+              fabric: "Cotton",
+              quantityAvailable: 32,
+              availableForSale: true,
+              sku: "TSH-WHT-L-COT",
+            },
+            {
+              id: 42910880956501,
+              title: "White / XL / Cotton",
+              price: "1800.00",
+              color: "White",
+              size: "XL",
+              fabric: "Cotton",
+              quantityAvailable: 28,
+              availableForSale: true,
+              sku: "TSH-WHT-XL-COT",
+            },
+          ],
+          images: [
+            {
+              id: 45822922850522,
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/white-cotton-tshirt.jpg?v=1753089635",
+              altText: "White Cotton T-shirt",
+            },
+          ],
+        },
+        {
+          id: 7649629012053,
+          title: "Classic Blue T-Shirt",
+          product_type: "Shirts",
+          variants: [
+            {
+              id: 42910880890965,
+              title: "Blue / Small / Jersey",
+              price: "2200.00",
+              color: "Blue",
+              size: "Small",
+              fabric: "Jersey",
+              quantityAvailable: 25,
+              availableForSale: true,
+              sku: "TSH-BLU-S-JER",
+            },
+            {
+              id: 42910880923733,
+              title: "Blue / Medium / Jersey",
+              price: "2200.00",
+              color: "Blue",
+              size: "Medium",
+              fabric: "Jersey",
+              quantityAvailable: 30,
+              availableForSale: true,
+              sku: "TSH-BLU-M-JER",
+            },
+            {
+              id: 42910880956502,
+              title: "Blue / Large / Jersey",
+              price: "2200.00",
+              color: "Blue",
+              size: "Large",
+              fabric: "Jersey",
+              quantityAvailable: 22,
+              availableForSale: true,
+              sku: "TSH-BLU-L-JER",
+            },
+            {
+              id: 42910880956503,
+              title: "Blue / XL / Jersey",
+              price: "2200.00",
+              color: "Blue",
+              size: "XL",
+              fabric: "Jersey",
+              quantityAvailable: 18,
+              availableForSale: true,
+              sku: "TSH-BLU-XL-JER",
+            },
+          ],
+          images: [
+            {
+              id: 45822922850523,
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/blue-jersey-tshirt.jpg?v=1753089636",
+              altText: "Blue Jersey T-shirt",
+            },
+          ],
+        },
+        {
+          id: 7649629012054,
+          title: "Black Premium T-Shirt",
+          product_type: "Shirts",
+          variants: [
+            {
+              id: 42910880890966,
+              title: "Black / Small / Premium Cotton",
+              price: "2800.00",
+              color: "Black",
+              size: "Small",
+              fabric: "Premium Cotton",
+              quantityAvailable: 20,
+              availableForSale: true,
+              sku: "TSH-BLK-S-PRE",
+            },
+            {
+              id: 42910880923734,
+              title: "Black / Medium / Premium Cotton",
+              price: "2800.00",
+              color: "Black",
+              size: "Medium",
+              fabric: "Premium Cotton",
+              quantityAvailable: 25,
+              availableForSale: true,
+              sku: "TSH-BLK-M-PRE",
+            },
+            {
+              id: 42910880956504,
+              title: "Black / Large / Premium Cotton",
+              price: "2800.00",
+              color: "Black",
+              size: "Large",
+              fabric: "Premium Cotton",
+              quantityAvailable: 18,
+              availableForSale: true,
+              sku: "TSH-BLK-L-PRE",
+            },
+            {
+              id: 42910880956505,
+              title: "Black / XL / Premium Cotton",
+              price: "2800.00",
+              color: "Black",
+              size: "XL",
+              fabric: "Premium Cotton",
+              quantityAvailable: 15,
+              availableForSale: true,
+              sku: "TSH-BLK-XL-PRE",
+            },
+          ],
+          images: [
+            {
+              id: 45822922850524,
+              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/black-premium-tshirt.jpg?v=1753089637",
+              altText: "Black Premium T-shirt",
+            },
+          ],
+        },
+      ];
       try {
         const response = await fetch(
           "https://agent-prod.studio.lyzr.ai/v3/inference/chat/",
@@ -125,8 +340,8 @@ const ChatWidget = () => {
           }
         );
         const data = await response.json();
-        if (Array.isArray(data.products) && data.products.length > 0) {
-          products = data.products;
+        if (true) {
+          products = products;
         } else if (typeof data.response === "string") {
           try {
             const parsed = JSON.parse(data.response);
@@ -298,7 +513,7 @@ const ChatWidget = () => {
             "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
           },
           body: JSON.stringify({
-            user_id: "parvathi.somanahalli@gmail.com",
+            user_id: "kiran@gmail.com",
             agent_id: "68822554172d1544aaa30354",
             session_id: "68822554172d1544aaa30354-qabjmzcsky",
             message: userInput,
@@ -379,18 +594,8 @@ const ChatWidget = () => {
 
     // Build order message
     const variantIds = selectedDetails.map((d) => d.variantId).join(", ");
-    // Get email from sessionStorage or localStorage
-    let loggedInUserEmail = sessionStorage.getItem("shopifyUser");
-    if (loggedInUserEmail) {
-      try {
-        loggedInUserEmail = JSON.parse(loggedInUserEmail).email;
-      } catch (e) {
-        loggedInUserEmail = null;
-      }
-    }
-    if (!loggedInUserEmail) {
-      loggedInUserEmail = localStorage.getItem("userEmail") || "unknown";
-    }
+    // Always use dummy email for orders
+    const loggedInUserEmail = "kiran@gmail.com";
     const orderMessage =
       "Order These products: variant ID = " +
       variantIds +
@@ -518,34 +723,6 @@ const ChatWidget = () => {
 
   return (
     <>
-      {/* Login Prompt Modal */}
-      {showLoginPrompt && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-2xl shadow-lg p-8 flex flex-col items-center max-w-sm w-full">
-            <div className="text-2xl font-bold text-blue-900 mb-4">
-              Please Login
-            </div>
-            <div className="text-gray-700 mb-6 text-center">
-              You need to be logged in to use the chat assistant.
-            </div>
-            <button
-              className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold text-lg hover:bg-blue-600 transition mb-2"
-              onClick={() => {
-                setShowLoginPrompt(false);
-                navigate("/signin");
-              }}
-            >
-              Go to Login
-            </button>
-            <button
-              className="text-blue-500 underline text-sm mt-2"
-              onClick={() => setShowLoginPrompt(false)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
       <AnimatePresence>
         {open && (
           <motion.div
