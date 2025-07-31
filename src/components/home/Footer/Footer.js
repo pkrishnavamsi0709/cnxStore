@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { FaFacebook, FaYoutube, FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaFacebook, FaYoutube, FaLinkedin, FaInstagram, FaTwitter, FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import FooterListTitle from "./FooterListTitle";
 import { paymentCard } from "../../../assets/images";
 import Image from "../../designLayouts/Image";
@@ -27,111 +28,164 @@ const Footer = () => {
       setEmailInfo("");
     }
   };
+
+  const socialLinks = [
+    { 
+      icon: <FaFacebook />, 
+      url: "https://www.facebook.com/CNXStoreOfficial", 
+      label: "Facebook" 
+    },
+    { 
+      icon: <FaInstagram />, 
+      url: "https://www.instagram.com/cnx_store/", 
+      label: "Instagram" 
+    },
+    { 
+      icon: <FaTwitter />, 
+      url: "https://twitter.com/CNXStore", 
+      label: "Twitter" 
+    },
+    { 
+      icon: <FaLinkedin />, 
+      url: "https://www.linkedin.com/company/cnx-store-private-limited", 
+      label: "LinkedIn" 
+    },
+    { 
+      icon: <FaYoutube />, 
+      url: "https://www.youtube.com/@CNXStoreOfficial", 
+      label: "YouTube" 
+    }
+  ];
+
   return (
     <div className="w-full bg-[#F5F5F3] py-20">
-      <div className="max-w-container mx-auto grid grid-cols-1 md:grid-cols-2  xl:grid-cols-6 px-4 gap-10">
+      <div className="max-w-container mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 px-4 gap-10">
+        
+        {/* Company Info Section */}
         <div className="col-span-2">
-          <FooterListTitle title=" More about Orebi Shop" />
+          <FooterListTitle title="CNX Store - Style. Value. Trust." />
           <div className="flex flex-col gap-6">
-            <p className="text-base w-full xl:w-[80%]">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim sint
-              ab ullam, numquam nesciunt in.
+            <p className="text-base w-full xl:w-[90%] text-lightText">
+              Your premier fashion destination since 2018. We curate exceptional clothing collections 
+              that blend contemporary fashion with classic elegance, serving 2M+ customers worldwide 
+              with quality, style, and unmatched customer satisfaction.
             </p>
-            <ul className="flex items-center gap-2">
-              <a
-                href="https://www.youtube.com/@reactjsBD"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <li className="w-7 h-7 bg-primeColor text-gray-100 hover:text-white cursor-pointer text-lg rounded-full flex justify-center items-center hover:bg-black duration-300">
-                  <FaYoutube />
-                </li>
-              </a>
-              <a
-                href="https://github.com/noorjsdivs"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <li className="w-7 h-7 bg-primeColor text-gray-100 hover:text-white cursor-pointer text-lg rounded-full flex justify-center items-center hover:bg-black duration-300">
-                  <FaGithub />
-                </li>
-              </a>
-              <a
-                href="https://www.facebook.com/Noorlalu143/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <li className="w-7 h-7 bg-primeColor text-gray-100 hover:text-white cursor-pointer text-lg rounded-full flex justify-center items-center hover:bg-black duration-300">
-                  <FaFacebook />
-                </li>
-              </a>
-              <a
-                href="https://www.linkedin.com/in/noor-mohammad-ab2245193/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <li className="w-7 h-7 bg-primeColor text-gray-100 hover:text-white cursor-pointer text-lg rounded-full flex justify-center items-center hover:bg-black duration-300">
-                  <FaLinkedin />
-                </li>
-              </a>
-            </ul>
+            
+            {/* Contact Info */}
+            <div className="space-y-2 text-sm text-lightText">
+              <div className="flex items-center gap-2">
+                <FaPhone className="text-primeColor" />
+                <span>24/7 Support: 1800-123-4567</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaEnvelope className="text-primeColor" />
+                <span>info@cnxstore.com</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FaMapMarkerAlt className="text-primeColor" />
+                <span>Gurugram, India | 50+ Cities</span>
+              </div>
+            </div>
+
+            {/* Social Media Links */}
+            <div>
+              <p className="text-sm font-semibold text-primeColor mb-3">Follow Us</p>
+              <ul className="flex items-center gap-2">
+                {socialLinks.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={social.label}
+                  >
+                    <li className="w-8 h-8 bg-primeColor text-gray-100 hover:text-white cursor-pointer text-lg rounded-full flex justify-center items-center hover:bg-black duration-300">
+                      {social.icon}
+                    </li>
+                  </a>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
+
+        {/* Shop Categories */}
         <div>
-          <FooterListTitle title="Shop" />
+          <FooterListTitle title="Shop Categories" />
           <ul className="flex flex-col gap-2">
+            <Link to="/shop">
+              <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
+                Women's Fashion
+              </li>
+            </Link>
+            <Link to="/shop">
+              <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
+                Men's Essentials
+              </li>
+            </Link>
+            <Link to="/shop">
+              <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
+                Kids Collection
+              </li>
+            </Link>
+            <Link to="/shop">
+              <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
+                Accessories
+              </li>
+            </Link>
+            <Link to="/shop">
+              <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
+                New Arrivals
+              </li>
+            </Link>
+          </ul>
+        </div>
+
+        {/* Customer Support */}
+        <div>
+          <FooterListTitle title="Customer Support" />
+          <ul className="flex flex-col gap-2">
+            <Link to="/signin">
+              <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
+                My Account
+              </li>
+            </Link>
             <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Accesories
+              Order Tracking
             </li>
             <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Clothes
+              Size Guide
             </li>
             <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Electronics
+              Return Policy
             </li>
             <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Home appliances
-            </li>
-            <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              New Arrivals
+              Shipping Info
             </li>
           </ul>
         </div>
-        <div>
-          <FooterListTitle title="Your account" />
-          <ul className="flex flex-col gap-2">
-            <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Profile
-            </li>
-            <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Orders
-            </li>
-            <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Addresses
-            </li>
-            <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Account Details
-            </li>
-            <li className="font-titleFont text-base text-lightText hover:text-black hover:underline decoration-[1px] decoration-gray-500 underline-offset-2 cursor-pointer duration-300">
-              Payment Options
-            </li>
-          </ul>
-        </div>
+
+        {/* Newsletter Subscription */}
         <div className="col-span-2 flex flex-col items-center w-full px-4">
-          <FooterListTitle title="Subscribe to our newsletter." />
+          <FooterListTitle title="Stay Updated with CNX Store" />
           <div className="w-full">
-            <p className="text-center mb-4">
-              A at pellentesque et mattis porta enim elementum.
+            <p className="text-center mb-4 text-lightText">
+              Subscribe to get exclusive offers, style tips, and be the first to know about our latest collections and special deals.
             </p>
             {subscription ? (
-              <motion.p
+              <motion.div
                 initial={{ x: 20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.5 }}
-                className="w-full text-center text-base font-titleFont font-semibold text-green-600"
+                className="text-center"
               >
-                Subscribed Successfully !
-              </motion.p>
+                <p className="w-full text-center text-base font-titleFont font-semibold text-green-600 mb-2">
+                  🎉 Welcome to CNX Store Family!
+                </p>
+                <p className="text-sm text-lightText">
+                  You'll receive exclusive offers and style updates straight to your inbox.
+                </p>
+              </motion.div>
             ) : (
               <div className="w-full flex-col xl:flex-row flex justify-between items-center gap-4">
                 <div className="flex flex-col w-full">
@@ -139,8 +193,8 @@ const Footer = () => {
                     onChange={(e) => setEmailInfo(e.target.value)}
                     value={emailInfo}
                     className="w-full h-12 border-b border-gray-400 bg-transparent px-4 text-primeColor text-lg placeholder:text-base outline-none"
-                    type="text"
-                    placeholder="Insert your email ...*"
+                    type="email"
+                    placeholder="Your email for exclusive offers...*"
                   />
                   {errMsg && (
                     <p className="text-red-600 text-sm font-semibold font-titleFont text-center animate-bounce mt-2">
@@ -150,22 +204,80 @@ const Footer = () => {
                 </div>
                 <button
                   onClick={handleSubscription}
-                  className="bg-white text-lightText w-[30%] h-10 hover:bg-black hover:text-white duration-300 text-base tracking-wide"
+                  className="bg-primeColor text-white w-full xl:w-[30%] h-12 hover:bg-black duration-300 text-base tracking-wide rounded-md font-medium"
                 >
                   Subscribe
                 </button>
               </div>
             )}
 
-            <Image
-              className={`w-[80%] lg:w-[60%] mx-auto ${
-                subscription ? "mt-2" : "mt-6"
-              }`}
-              imgSrc={paymentCard}
-            />
+            {/* Payment Methods */}
+            <div className="mt-6">
+              <p className="text-center text-sm text-lightText mb-3">Secure Payment Methods</p>
+              <Image
+                className={`w-[80%] lg:w-[60%] mx-auto ${
+                  subscription ? "mt-2" : ""
+                }`}
+                imgSrc={paymentCard}
+                alt="Accepted payment methods"
+              />
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Bottom Footer */}
+      {/* <div className="max-w-container mx-auto px-4 mt-16 pt-8 border-t border-gray-300">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="text-center md:text-left">
+            <p className="text-sm text-lightText">
+              © 2024 CNX Store Private Limited. All rights reserved.
+            </p>
+            <p className="text-xs text-lightText mt-1">
+              CIN: U52100DL2018PTC334567 | GST: 07AABCC1234M1Z5
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-4 text-sm">
+            <Link to="/about" className="text-lightText hover:text-primeColor duration-300">
+              About Us
+            </Link>
+            <span className="text-gray-400">|</span>
+            <a href="#" className="text-lightText hover:text-primeColor duration-300">
+              Privacy Policy
+            </a>
+            <span className="text-gray-400">|</span>
+            <a href="#" className="text-lightText hover:text-primeColor duration-300">
+              Terms of Service
+            </a>
+            <span className="text-gray-400">|</span>
+            <a href="tel:18001234567" className="text-lightText hover:text-primeColor duration-300">
+              Contact Support
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <div className="flex flex-wrap justify-center items-center gap-6 text-xs text-lightText">
+            <div className="flex items-center gap-1">
+              <span className="text-green-600">✓</span>
+              <span>2M+ Happy Customers</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-green-600">✓</span>
+              <span>Same Day Delivery</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-green-600">✓</span>
+              <span>96% Customer Satisfaction</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-green-600">✓</span>
+              <span>1000+ Brand Partners</span>
+            </div>
+          </div>
+        </div>
+      </div> */}
     </div>
   );
 };
