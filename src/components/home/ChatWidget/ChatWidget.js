@@ -26,9 +26,9 @@ const ChatWidget = () => {
 
   // Option sets
   const contextOptions = [
-    { label: "Orders Status", value: "orders_status" },
+    { label: "General Queries", value: "support" },
     { label: "Search And Order", value: "products" },
-    { label: "Conversational", value: "support" },
+    { label: "Orders Status", value: "orders_status" }
   ];
 
   React.useEffect(() => {
