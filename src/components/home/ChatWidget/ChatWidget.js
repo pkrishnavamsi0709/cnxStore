@@ -602,9 +602,7 @@ const ChatWidget = () => {
     const orderMessage =
       "Order These products: variant ID = " +
       variantIds +
-      ', email = "' +
-      loggedInUserEmail +
-      '"';
+      ', email = "kiran@gmail.com"';
     // Call the product search API as the order API
     try {
       const response = await fetch(
@@ -616,9 +614,9 @@ const ChatWidget = () => {
             "x-api-key": "sk-default-boDM8Mx36JzOUjac0cpKiTucrg0p853x",
           },
           body: JSON.stringify({
-            user_id: "parvathi.somanahalli@gmail.com",
-            agent_id: "68822554172d1544aaa30354",
-            session_id: "68822554172d1544aaa30354-qabjmzcsky",
+            user_id: "parvathi.somanahalli@concentrix.com",
+            agent_id: "68872e64c9c08f1592801e0f",
+            session_id: "68872e64c9c08f1592801e0f-23knoh3uucri",
             message: orderMessage,
           }),
         }
