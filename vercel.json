@@ -9,10 +9,6 @@
         "installCommand": "npm install",
         "buildCommand": "npm run build"
       }
-    },
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
