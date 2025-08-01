@@ -507,7 +507,7 @@ const NewsletterSignup = () => {
 };
 
 const Offers = () => {
-  const [prevLocation, // setPrevLocation] = useState("");
+  // const [prevLocation, setPrevLocation] = useState("");
   const { pageData, loading, error } = useOffersPageContent();
 
   // Log the Adobe AEM data
@@ -653,7 +653,7 @@ const Offers = () => {
 
   return (
     <div className="max-w-container mx-auto px-4">
-      <Breadcrumbs title="Special Offers" prevLocation={prevLocation} />
+      <Breadcrumbs title="Special Offers" prevLocation="" />
 
       {/* Adobe AEM Content Display */}
       {loading && (
