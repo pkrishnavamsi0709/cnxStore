@@ -11,6 +11,7 @@ import {
   Zap,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import useOffersPageContent from "../../constants/AEM_content/offersPage_content";
 
 // Deal Timer Component
 const DealTimer = ({ endTime }) => {
@@ -507,6 +508,17 @@ const NewsletterSignup = () => {
 
 const Offers = () => {
   const [prevLocation, setPrevLocation] = useState("");
+  const { pageData, loading, error } = useOffersPageContent();
+
+  // Log the Adobe AEM data
+  useEffect(() => {
+    if (pageData) {
+      console.log("🎁 Offers page data loaded from Adobe AEM:", pageData);
+    }
+    if (error) {
+      console.error("❌ Offers page error:", error);
+    }
+  }, [pageData, error]);
 
   // Simple breadcrumb component
   const Breadcrumbs = ({ title, prevLocation }) => (
@@ -642,6 +654,44 @@ const Offers = () => {
   return (
     <div className="max-w-container mx-auto px-4">
       <Breadcrumbs title="Special Offers" prevLocation={prevLocation} />
+
+      {/* Adobe AEM Content Display */}
+      {loading && (
+        <div className="text-center py-8">
+          <p>Loading dynamic content from Adobe AEM...</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="text-center py-8 text-red-600">
+          <p>Error loading dynamic content: {error}</p>
+        </div>
+      )}
+
+      {pageData && (
+        <div className="mb-8 p-4 bg-gray-50 rounded-lg">
+          <h2 className="text-2xl font-bold mb-4">
+            Dynamic Content from Adobe AEM
+          </h2>
+          <p>
+            <strong>Title:</strong> {pageData.title}
+          </p>
+          <p>
+            <strong>Type:</strong> {pageData[":type"]}
+          </p>
+          <p>
+            <strong>Language:</strong> {pageData.language}
+          </p>
+          <details className="mt-4">
+            <summary className="cursor-pointer font-medium">
+              View Full Adobe AEM Data
+            </summary>
+            <pre className="mt-2 p-4 bg-white rounded text-sm overflow-auto">
+              {JSON.stringify(pageData, null, 2)}
+            </pre>
+          </details>
+        </div>
+      )}
 
       {/* Hero Section */}
       <div className="pb-8">
