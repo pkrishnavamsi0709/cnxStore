@@ -64,7 +64,7 @@ export const getPaginationItems = async () => {
       response.data?.data?.products?.edges?.map((edge) => edge.node) || [];
     console.log("Fetched products:", products);
     products = products.map((product, index) => {
-      let { id, images, variants } = product;
+      let { images, variants } = product;
 
       // Process variants to extract color, size, and other options
       const processedVariants = variants.edges.map((variantEdge) => {

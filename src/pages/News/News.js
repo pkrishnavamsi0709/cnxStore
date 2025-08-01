@@ -141,7 +141,7 @@ const BreakingNewsTicker = () => {
       setCurrentIndex((prev) => (prev + 1) % breakingNews.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [breakingNews.length]);
 
   return (
     <div className="bg-red-600 text-white py-3 mb-8 overflow-hidden">
@@ -511,7 +511,7 @@ const News = () => {
         allNews.filter((news) => news.category === activeCategory)
       );
     }
-  }, [activeCategory]);
+  }, [activeCategory, allNews]);
 
   return (
     <div className="max-w-container mx-auto px-4">

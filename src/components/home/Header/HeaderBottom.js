@@ -23,19 +23,20 @@ const HeaderBottom = () => {
     });
   }, [show, ref]);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  // Search functionality (commented out for now)
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const [filteredProducts, setFilteredProducts] = useState([]);
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  // const handleSearch = (e) => {
+  //   setSearchQuery(e.target.value);
+  // };
 
-  useEffect(() => {
-    const filtered = paginationItems.filter((item) =>
-      item.productName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredProducts(filtered);
-  }, [searchQuery]);
+  // useEffect(() => {
+  //   const filtered = paginationItems.filter((item) =>
+  //     item.productName.toLowerCase().includes(searchQuery.toLowerCase())
+  //   );
+  //   setFilteredProducts(filtered);
+  // }, [searchQuery]);
 
   return (
     <div className="w-full bg-[#F5F5F3] relative">
