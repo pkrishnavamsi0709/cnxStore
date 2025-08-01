@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Clock, Tag, TrendingUp, Eye, MessageCircle, Share2, Calendar, User, BookOpen, Zap, Globe, Award, ShoppingBag, Heart } from "lucide-react";
+import { // Clock, Tag, TrendingUp, Eye, MessageCircle, Share2, Calendar, User, BookOpen, Zap, Globe, Award, ShoppingBag, Heart } from "lucide-react";
 
 // News Article Card Component
 const NewsArticleCard = ({ article, size = "medium" }) => {

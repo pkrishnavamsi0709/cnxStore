@@ -40,7 +40,7 @@ const useOffersPageContent = () => {
 };
 
 // Place this in Offers.js or a utils file
-function extractOffersPageTexts(pageData) {
+// function extractOffersPageTexts(pageData) {
   try {
     // Adjust the path as per your AEM structure
     const items =

@@ -6,7 +6,7 @@ import {
   FaClock,
   FaDollarSign,
   FaExclamationTriangle,
-  FaEye,
+  // FaEye,
   FaShoppingBag,
   FaTruck,
 } from "react-icons/fa";

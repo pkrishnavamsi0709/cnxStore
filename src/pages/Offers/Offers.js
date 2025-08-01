@@ -507,7 +507,7 @@ const NewsletterSignup = () => {
 };
 
 const Offers = () => {
-  const [prevLocation, setPrevLocation] = useState("");
+  const [prevLocation, // setPrevLocation] = useState("");
   const { pageData, loading, error } = useOffersPageContent();
 
   // Log the Adobe AEM data

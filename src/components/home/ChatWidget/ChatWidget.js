@@ -47,11 +47,11 @@ const ChatWidget = () => {
     return () => window.removeEventListener("openChatWidget", handler);
   }, []);
 
-  const clearChatHistory = () => {
-    setMessages(getInitialMessages());
-    setContext(null);
-    // setSelectedOption(null);
-  };
+  // const clearChatHistory = () => {
+  //   setMessages(getInitialMessages());
+  //   setContext(null);
+  //   // setSelectedOption(null);
+  // };
 
   // Handle context option selection
   const handleContextSelect = (option) => {
@@ -410,7 +410,7 @@ const ChatWidget = () => {
     // Build order message
     const variantIds = selectedDetails.map((d) => d.variantId).join(", ");
     // Always use dummy email for orders
-    const loggedInUserEmail = "kiran@gmail.com";
+    // const loggedInUserEmail = "kiran@gmail.com";
     const orderMessage =
       "Order These products: variant ID = " +
       variantIds +
