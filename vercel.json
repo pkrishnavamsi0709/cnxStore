@@ -18,10 +18,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "functions": {
-    "api/proxy.js": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }
