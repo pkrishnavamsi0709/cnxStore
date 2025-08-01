@@ -18,21 +18,23 @@ import SignUp from "./pages/Account/SignUp";
 import Cart from "./pages/Cart/Cart";
 import Contact from "./pages/Contact/Contact";
 import Home from "./pages/Home/Home";
-import Journal from "./pages/Journal/Journal";
-import Offer from "./pages/Offer/Offer";
-import Payment from "./pages/payment/Payment";
-import ProductDetails from "./pages/ProductDetails/ProductDetails";
-import Shop from "./pages/Shop/Shop";
+// import Journal from "./pages/Journal/Journal";
 import Orders from "./pages/Account/Orders";
 import Profile from "./pages/Account/Profile";
 import News from "./pages/News/News";
+import Offer from "./pages/Offer/Offer";
 import Offers from "./pages/Offers/Offers";
+import Payment from "./pages/payment/Payment";
+import ProductDetails from "./pages/ProductDetails/ProductDetails";
+import Shop from "./pages/Shop/Shop";
 
-loadpaginationItems().then(() => {
-  console.log("Pagination items loaded successfully");
-}).catch((error) => {
-  console.error("Error loading pagination items:", error);
-});
+loadpaginationItems()
+  .then(() => {
+    console.log("Pagination items loaded successfully");
+  })
+  .catch((error) => {
+    console.error("Error loading pagination items:", error);
+  });
 
 const Layout = () => {
   return (

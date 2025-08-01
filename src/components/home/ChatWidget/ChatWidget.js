@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 
-const CHAT_HISTORY_KEY = "chatWidgetHistory";
+// const CHAT_HISTORY_KEY = "chatWidgetHistory";
 
 const getInitialMessages = () => [
   { from: "bot", text: "Hi! How can I help you today?" },
@@ -13,16 +13,16 @@ const ChatWidget = () => {
   const [messages, setMessages] = React.useState(getInitialMessages);
   const [input, setInput] = React.useState("");
   const [context, setContext] = React.useState(null); // 'orders', 'products', 'support', etc.
-  const [selectedOption, setSelectedOption] = React.useState(null);
+  // const [selectedOption, setSelectedOption] = React.useState(null);
   const [products, setProducts] = React.useState([]); // For product search results
   const [selectedVariants, setSelectedVariants] = React.useState([]); // For multi-select
   const [ordering, setOrdering] = React.useState(false);
   const [orderedVariantsDetails, setOrderedVariantsDetails] = React.useState(
     []
   ); // Store ordered variants for display
-  const [loadingProducts, setLoadingProducts] = React.useState(false);
+  // const [loadingProducts, setLoadingProducts] = React.useState(false);
   const [orderResult, setOrderResult] = React.useState(null); // Store order API response
-  const [showProductGrid, setShowProductGrid] = React.useState(false); // NEW: control product grid visibility
+  // const [showProductGrid, setShowProductGrid] = React.useState(false); // NEW: control product grid visibility
 
   // Option sets
   const contextOptions = [
@@ -50,13 +50,13 @@ const ChatWidget = () => {
   const clearChatHistory = () => {
     setMessages(getInitialMessages());
     setContext(null);
-    setSelectedOption(null);
+    // setSelectedOption(null);
   };
 
   // Handle context option selection
   const handleContextSelect = (option) => {
     setContext(option.value);
-    setSelectedOption(option.value);
+    // setSelectedOption(option.value);
     setProducts([]);
     setSelectedVariants([]);
     if (option.value === "products") {
@@ -97,10 +97,10 @@ const ChatWidget = () => {
         { from: "bot", text: "Searching for products...", isLoading: true },
       ]);
       setInput("");
-      setLoadingProducts(true);
+      // setLoadingProducts(true);
 
       let products = [];
-      
+
       try {
         // Call the webhook to get products
         const response = await fetch(
@@ -113,14 +113,14 @@ const ChatWidget = () => {
             body: `query=${encodeURIComponent(userInput)}`,
           }
         );
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         console.log("Webhook response:", data);
-        
+
         // Extract products from the webhook response
         if (data && Array.isArray(data) && data.length > 0) {
           const firstItem = data[0];
@@ -128,7 +128,7 @@ const ChatWidget = () => {
             products = firstItem.output.products;
           }
         }
-        
+
         // If no products found from webhook, use fallback products
         if (!Array.isArray(products) || products.length === 0) {
           console.log("No products found from webhook, using fallback");
@@ -172,6 +172,7 @@ const ChatWidget = () => {
       } catch (error) {
         console.error("Error fetching products from webhook:", error);
         // Use fallback products on error
+        // setLoadingProducts(false);
         products = [
           {
             id: 9257124200665,
@@ -210,9 +211,9 @@ const ChatWidget = () => {
         ];
       }
 
-      setLoadingProducts(false);
+      // setLoadingProducts(false);
       setProducts(products);
-      setShowProductGrid(true);
+      // setShowProductGrid(true);
       setMessages((msgs) => {
         const newMsgs = [...msgs];
         const lastLoadingIdx = newMsgs
@@ -410,7 +411,10 @@ const ChatWidget = () => {
     const variantIds = selectedDetails.map((d) => d.variantId).join(", ");
     // Always use dummy email for orders
     const loggedInUserEmail = "kiran@gmail.com";
-    const orderMessage ='Order These products: variant ID = ' + variantIds + ', email = "kiran@gmail.com"';
+    const orderMessage =
+      "Order These products: variant ID = " +
+      variantIds +
+      ', email = "kiran@gmail.com"';
     // Call the product search API as the order API
     try {
       const response = await fetch(
@@ -528,7 +532,7 @@ const ChatWidget = () => {
   // Handler to go back to main menu
   const handleBackToMainMenu = () => {
     setContext(null);
-    setSelectedOption(null);
+    // setSelectedOption(null);
     setProducts([]);
     setSelectedVariants([]);
     setOrderedVariantsDetails([]);
