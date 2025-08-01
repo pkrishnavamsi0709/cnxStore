@@ -99,323 +99,134 @@ const ChatWidget = () => {
       setInput("");
       setLoadingProducts(true);
 
-      let products = [
-        {
-          id: 7650044379219,
-          title: "White Button-Up Shirt",
-          product_type: "clothing",
-          variants: [
-            {
-              id: 42910842454099,
-              title: "Holographic / S / Cotton",
-              price: "2234.99",
-              color: "Holographic",
-              size: "S",
-              fabric: "Cotton",
-              quantityAvailable: 15,
-              availableForSale: true,
-              sku: "FDSAGREGF3",
-            },
-            {
-              id: 42910842486867,
-              title: "Holographic / L / Cotton",
-              price: "2234.99",
-              color: "Holographic",
-              size: "L",
-              fabric: "Cotton",
-              quantityAvailable: 15,
-              availableForSale: true,
-              sku: "FDSAGREGF4",
-            },
-            {
-              id: 42910842519635,
-              title: "Holographic / M / Cotton",
-              price: "2234.99",
-              color: "Holographic",
-              size: "M",
-              fabric: "Cotton",
-              quantityAvailable: 15,
-              availableForSale: true,
-              sku: "FDSAGREGF5",
-            },
-          ],
-          images: [
-            {
-              id: 0, // No image ID provided, assigning 0 as placeholder
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/person-in-a-white-shirt-stands-by-the-water.jpg?v=1753181507",
-              altText: "White Button-Up Shirt",
-            },
-          ],
-        },
-        {
-          id: 7650044411987,
-          title: "Bearded Man in White Shirt",
-          product_type: "clothing",
-          variants: [
-            {
-              id: 42910831673427,
-              title: "White / 3XL / Cotton",
-              price: "3552.50",
-              color: "White",
-              size: "3XL",
-              fabric: "Cotton",
-              quantityAvailable: 33,
-              availableForSale: true,
-              sku: "FSGDGREE3",
-            },
-            {
-              id: 42910831706195,
-              title: "White / XS / Cotton",
-              price: "3552.50",
-              color: "White",
-              size: "XS",
-              fabric: "Cotton",
-              quantityAvailable: 33,
-              availableForSale: true,
-              sku: "FSGDGREE4",
-            },
-            {
-              id: 42910831738963,
-              title: "White / 2XL / Cotton",
-              price: "3552.50",
-              color: "White",
-              size: "2XL",
-              fabric: "Cotton",
-              quantityAvailable: 33,
-              availableForSale: true,
-              sku: "FSGDGREE5",
-            },
-          ],
-          images: [
-            {
-              id: 0, // Image ID is not present in your data, so keeping 0 as placeholder
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/Screenshot2025-07-22155041.png?v=1753181568",
-              altText: "Bearded Man in White Shirt",
-            },
-          ],
-        },
-        {
-          id: 7650046672979,
-          title: "Light Blue Casual Shirt",
-          product_type: "clothing",
-          variants: [
-            {
-              id: 42910670651475,
-              title: "Blue",
-              price: "4578.00",
-              color: "Blue",
-              size: "", // Size not available in the data
-              fabric: "", // Fabric not available in the data
-              quantityAvailable: 9,
-              availableForSale: true,
-              sku: "SDVSGE3FF-1",
-            },
-            {
-              id: 42910670684243,
-              title: "Yellow",
-              price: "4578.00",
-              color: "Yellow",
-              size: "", // Size not available in the data
-              fabric: "", // Fabric not available in the data
-              quantityAvailable: 20,
-              availableForSale: true,
-              sku: "SDVSGE3FF-2",
-            },
-          ],
-          images: [
-            {
-              id: 0,
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/Screenshot2025-07-22163017.png?v=1753182448",
-              altText: "Light Blue Casual Shirt",
-            },
-          ],
-        },
-        {
-          id: 7650056536147,
-          title: "Embroidered White Satin Shirt",
-          product_type: "Clothing",
-          variants: [
-            {
-              id: 42910454415443,
-              title: "Floral / 3XL / Satin",
-              price: "48.50",
-              color: "Floral",
-              size: "3XL",
-              fabric: "Satin",
-              quantityAvailable: 12,
-              availableForSale: true,
-              sku: "WMN-FLORAL-WHITE-001",
-            },
-            {
-              id: 42910454448211,
-              title: "Floral / XS / Satin",
-              price: "48.50",
-              color: "Floral",
-              size: "XS",
-              fabric: "Satin",
-              quantityAvailable: 12,
-              availableForSale: true,
-              sku: "WMN-FLORAL-WHITE-002",
-            },
-            {
-              id: 42910454480979,
-              title: "Floral / 2XL / Satin",
-              price: "48.50",
-              color: "Floral",
-              size: "2XL",
-              fabric: "Satin",
-              quantityAvailable: 12,
-              availableForSale: true,
-              sku: "WMN-FLORAL-WHITE-003",
-            },
-          ],
-          images: [
-            {
-              id: 0,
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/Screenshot2025-07-22170946.png?v=1753185144",
-              altText: "Embroidered White Satin Shirt",
-            },
-          ],
-        },
-        {
-          id: 7649959870547,
-          title: "White shirt",
-          product_type: "clothing",
-          variants: [
-            {
-              id: 42910876794963,
-              title: "White / 3XL / Cotton",
-              price: "8760.0",
-              color: "White",
-              size: "3XL",
-              fabric: "Cotton",
-              quantityAvailable: 33,
-              availableForSale: true,
-              sku: "DFGHBVCX1",
-            },
-            {
-              id: 42910876827731,
-              title: "White / 3XL / Faux fur",
-              price: "8760.0",
-              color: "White",
-              size: "3XL",
-              fabric: "Faux fur",
-              quantityAvailable: 33,
-              availableForSale: true,
-              sku: "DFGHBVCX2",
-            },
-            {
-              id: 42910876860499,
-              title: "White / XS / Cotton",
-              price: "8760.0",
-              color: "White",
-              size: "XS",
-              fabric: "Cotton",
-              quantityAvailable: 33,
-              availableForSale: true,
-              sku: "DFGHBVCX3",
-            },
-          ],
-          images: [
-            {
-              id: 0,
-              src: "https://cdn.shopify.com/s/files/1/0654/7780/4115/files/person-in-a-white-shirt-walks-across-the-street.jpg?v=1753159395",
-              altText: "White shirt",
-            },
-          ],
-        },
-      ];
+      let products = [];
+      
       try {
+        // Call the webhook to get products
         const response = await fetch(
-          "https://agent-prod.studio.lyzr.ai/v3/inference/chat/",
+          "https://somanparv.app.n8n.cloud/webhook/get-shopify-products",
           {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
-              "x-api-key": "sk-default-eJyEAE8QZbGM4I9DKdtnCnFUR6bFQf8Y",
+              "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: JSON.stringify({
-              user_id: "bora.ajaykumar@concentrix.com",
-              agent_id: "6880c78e7e4f66ef347d8d4d",
-              session_id: "6880c78e7e4f66ef347d8d4d-zc2ao98wo9o",
-              message: userInput,
-            }),
+            body: `query=${encodeURIComponent(userInput)}`,
           }
         );
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
-        if (true) {
-          products = products;
-        } else if (typeof data.response === "string") {
-          try {
-            const parsed = JSON.parse(data.response);
-            if (parsed && Array.isArray(parsed.products)) {
-              products = parsed.products;
-            }
-          } catch (e) {
-            // ignore
+        console.log("Webhook response:", data);
+        
+        // Extract products from the webhook response
+        if (data && Array.isArray(data) && data.length > 0) {
+          const firstItem = data[0];
+          if (firstItem.output && firstItem.output.products) {
+            products = firstItem.output.products;
           }
         }
-      } catch (e) {
-        // Ignore errors for now
+        
+        // If no products found from webhook, use fallback products
+        if (!Array.isArray(products) || products.length === 0) {
+          console.log("No products found from webhook, using fallback");
+          products = [
+            {
+              id: 9257124200665,
+              title: "Example T-Shirt",
+              product_type: "Shirts",
+              variants: [
+                {
+                  id: 46818115715289,
+                  title: 'Lithograph - Height: 9" x Width: 12"',
+                  price: "25.00",
+                },
+                { id: 46818115748057, title: "Small", price: "19.99" },
+                { id: 46818115780825, title: "Medium", price: "19.99" },
+              ],
+              images: [
+                {
+                  id: 45822922850521,
+                  src: "https://cdn.shopify.com/s/files/1/0755/5419/3625/files/green-t-shirt.jpg?v=1752674862",
+                },
+              ],
+            },
+            {
+              id: 9257123905753,
+              title: "Black Beanbag",
+              product_type: "Indoor",
+              variants: [
+                { id: 46818113716441, title: "Default Title", price: "69.99" },
+              ],
+              images: [
+                {
+                  id: 45822919770329,
+                  src: "https://cdn.shopify.com/s/files/1/0755/5419/3625/files/comfortable-living-room-cat_925x_cac032a2-6215-4cac-b02f-01e45f24dbe8.jpg?v=1752674759",
+                },
+              ],
+            },
+          ];
+        }
+      } catch (error) {
+        console.error("Error fetching products from webhook:", error);
+        // Use fallback products on error
+        products = [
+          {
+            id: 9257124200665,
+            title: "Example T-Shirt",
+            product_type: "Shirts",
+            variants: [
+              {
+                id: 46818115715289,
+                title: 'Lithograph - Height: 9" x Width: 12"',
+                price: "25.00",
+              },
+              { id: 46818115748057, title: "Small", price: "19.99" },
+              { id: 46818115780825, title: "Medium", price: "19.99" },
+            ],
+            images: [
+              {
+                id: 45822922850521,
+                src: "https://cdn.shopify.com/s/files/1/0755/5419/3625/files/green-t-shirt.jpg?v=1752674862",
+              },
+            ],
+          },
+          {
+            id: 9257123905753,
+            title: "Black Beanbag",
+            product_type: "Indoor",
+            variants: [
+              { id: 46818113716441, title: "Default Title", price: "69.99" },
+            ],
+            images: [
+              {
+                id: 45822919770329,
+                src: "https://cdn.shopify.com/s/files/1/0755/5419/3625/files/comfortable-living-room-cat_925x_cac032a2-6215-4cac-b02f-01e45f24dbe8.jpg?v=1752674759",
+              },
+            ],
+          },
+        ];
       }
 
-      // Dummy fallback products
-      const dummyProducts = [
-        {
-          id: 9257124200665,
-          title: "Example T-Shirt",
-          product_type: "Shirts",
-          variants: [
-            {
-              id: 46818115715289,
-              title: 'Lithograph - Height: 9" x Width: 12"',
-              price: "25.00",
-            },
-            { id: 46818115748057, title: "Small", price: "19.99" },
-            { id: 46818115780825, title: "Medium", price: "19.99" },
-          ],
-          images: [
-            {
-              id: 45822922850521,
-              src: "https://cdn.shopify.com/s/files/1/0755/5419/3625/files/green-t-shirt.jpg?v=1752674862",
-            },
-          ],
-        },
-        {
-          id: 9257123905753,
-          title: "Black Beanbag",
-          product_type: "Indoor",
-          variants: [
-            { id: 46818113716441, title: "Default Title", price: "69.99" },
-          ],
-          images: [
-            {
-              id: 45822919770329,
-              src: "https://cdn.shopify.com/s/files/1/0755/5419/3625/files/comfortable-living-room-cat_925x_cac032a2-6215-4cac-b02f-01e45f24dbe8.jpg?v=1752674759",
-            },
-          ],
-        },
-      ];
-      const usingDummyProducts =
-        !Array.isArray(products) || products.length === 0;
-      if (usingDummyProducts) {
-        products = dummyProducts;
-      }
       setLoadingProducts(false);
       setProducts(products);
-      setShowProductGrid(true); // NEW: control product grid visibility
+      setShowProductGrid(true);
       setMessages((msgs) => {
         const newMsgs = [...msgs];
         const lastLoadingIdx = newMsgs
           .map((m) => m.isLoading)
           .lastIndexOf(true);
         if (lastLoadingIdx !== -1) {
-          if (!usingDummyProducts) {
+          if (products.length > 0 && products[0].id !== 9257124200665) {
+            // Real products found from webhook
             newMsgs[lastLoadingIdx] = {
               from: "bot",
               text: "Here are the products matching your search:",
             };
           } else {
+            // Using fallback products
             newMsgs[lastLoadingIdx] = {
               from: "bot",
               text: "Sorry, No products found for your search. Here are some products for you to choose from",
