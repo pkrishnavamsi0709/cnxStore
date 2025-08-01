@@ -1,4 +1,8 @@
 export default async function handler(req, res) {
+  console.log("🔍 Proxy API called:", req.method, req.url);
+  console.log("🔍 Query params:", req.query);
+  console.log("🔍 Headers:", req.headers);
+
   // Handle preflight requests
   if (req.method === "OPTIONS") {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -26,12 +30,16 @@ export default async function handler(req, res) {
     // Get the path from the request URL
     const { path } = req.query;
 
+    console.log("🔍 Requested path:", path);
+
     if (!path) {
+      console.log("❌ No path provided");
       return res.status(400).json({ error: "Path parameter is required" });
     }
 
     // Construct the target URL
     const targetUrl = `https://publish-p92368-e968987.adobeaemcloud.com${path}`;
+    console.log("🔍 Target URL:", targetUrl);
 
     // Forward the request to the Adobe AEM server
     const response = await fetch(targetUrl, {
@@ -47,13 +55,21 @@ export default async function handler(req, res) {
           : undefined,
     });
 
+    console.log("🔍 AEM Response status:", response.status);
+    console.log("🔍 AEM Response headers:", response.headers);
+
     // Get the response data
     const data = await response.json();
+    console.log("🔍 AEM Response data keys:", Object.keys(data || {}));
 
     // Forward the response status and data
     res.status(response.status).json(data);
   } catch (error) {
-    console.error("Proxy error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("❌ Proxy error:", error);
+    res.status(500).json({ 
+      error: "Internal server error", 
+      message: error.message,
+      stack: error.stack 
+    });
   }
 }
