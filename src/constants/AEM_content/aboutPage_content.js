@@ -8,7 +8,7 @@ const useAboutPageContent = () => {
 
   const fetchAboutPageData = async () => {
     const path =
-      "/content/concentrixpartnersandboxprogram/us/en/about-page.model.json";
+      "/api/content/test-site/en/Home.model.json";
 
     try {
       setLoading(true);

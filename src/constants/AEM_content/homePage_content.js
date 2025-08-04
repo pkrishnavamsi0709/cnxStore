@@ -8,7 +8,7 @@ const useHomePageContent = () => {
 
   const fetchHomePageData = async () => {
     const path =
-      "/content/concentrixpartnersandboxprogram/us/en/home-page.model.json";
+      "/content/test-site/en/Home.model.json";
 
     try {
       setLoading(true);
